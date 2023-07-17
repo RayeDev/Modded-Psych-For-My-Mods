@@ -2919,7 +2919,6 @@ class PlayState extends MusicBeatState
 		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
 		iconP1.scale.set(mult, mult);
 		iconP1.updateHitbox();
-
 		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
 		iconP2.scale.set(mult, mult);
 		iconP2.updateHitbox();
@@ -2932,15 +2931,105 @@ class PlayState extends MusicBeatState
 		if (health > 2)
 			health = 2;
 
-		if (healthBar.percent < 20)
-			iconP1.animation.curAnim.curFrame = 1;
-		else
-			iconP1.animation.curAnim.curFrame = 0;
+		if (iconP1.animation.frames == 3) {
+			if (healthBar.percent < 20)
+				iconP1.animation.curAnim.curFrame = 1;
+			else if (healthBar.percent >80)
+				iconP1.animation.curAnim.curFrame = 2;
+			else
+				iconP1.animation.curAnim.curFrame = 0;
+		} 
+		else if (iconP1.animation.frames == 1) {
+			if (healthBar.percent < 20)
+				iconP1.animation.curAnim.curFrame = 0;
+			else
+				iconP1.animation.curAnim.curFrame = 0;
+		}else{
+			if (healthBar.percent < 20)
+				iconP1.animation.curAnim.curFrame = 1;
+			else
+				iconP1.animation.curAnim.curFrame = 0;
+		}
+		if (iconP2.animation.frames == 3) {
+			if (healthBar.percent > 80)
+				iconP2.animation.curAnim.curFrame = 1;
+			else if (healthBar.percent < 20)
+				iconP2.animation.curAnim.curFrame = 2;
+			else 
+				iconP2.animation.curAnim.curFrame = 0;
+		} else if (iconP2.animation.frames == 1) {
+			if (healthBar.percent > 80)
+				iconP2.animation.curAnim.curFrame = 0;
+			else 
+				iconP2.animation.curAnim.curFrame = 0;
+		} else {
+			if (healthBar.percent > 80)
+				iconP2.animation.curAnim.curFrame = 1;
+			else 
+				iconP2.animation.curAnim.curFrame = 0;
+		}
 
-		if (healthBar.percent > 80)
-			iconP2.animation.curAnim.curFrame = 1;
-		else
-			iconP2.animation.curAnim.curFrame = 0;
+		if(ClientPrefs.camMove && !isCameraOnForcedPos){ //could be better but eh
+			if(!SONG.notes[curSection].mustHitSection){
+				switch(dad.animation.curAnim.name){ //SUPPORT FOR ALT ANIMATIONS WAJSKFHSDJKLFHASJKLDFHASJKLDFHASJKLDFHL
+					case "singLEFT":
+						camFollow.set(dad.getMidpoint().x + 150 - 40, dad.getMidpoint().y - 100);
+					case "singRIGHT":
+						camFollow.set(dad.getMidpoint().x + 150 + 40, dad.getMidpoint().y - 100);
+					case "singDOWN":
+						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 + 40);
+					case "singUP":
+						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 - 40);
+					case "singLEFT-alt":
+						camFollow.set(dad.getMidpoint().x + 150 - 40, dad.getMidpoint().y - 100);
+					case "singRIGHT-alt":
+						camFollow.set(dad.getMidpoint().x + 150 + 40, dad.getMidpoint().y - 100);
+					case "singDOWN-alt":
+						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 + 40);
+					case "singUP-alt":
+						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 - 40);
+					case "idle":
+						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+					case "idle-alt":
+						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+				}
+				camFollow.x += dad.cameraPosition[0] + opponentCameraOffset[0];
+				camFollow.y += dad.cameraPosition[1] + opponentCameraOffset[1];
+			}else{
+				switch(boyfriend.animation.curAnim.name){
+					case "singLEFT":
+						camFollow.set(boyfriend.getMidpoint().x - 100 - 40, boyfriend.getMidpoint().y - 100);
+					case "singRIGHT":
+						camFollow.set(boyfriend.getMidpoint().x - 100 + 40, boyfriend.getMidpoint().y - 100);
+					case "singDOWN":
+						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100 + 40);
+					case "singUP":
+						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100 - 40);
+					case "singLEFT-alt":
+						camFollow.set(boyfriend.getMidpoint().x - 100 - 40, boyfriend.getMidpoint().y - 100);
+					case "singRIGHT-alt":
+						camFollow.set(boyfriend.getMidpoint().x - 100 + 40, boyfriend.getMidpoint().y - 100);
+					case "singDOWN-alt":
+						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100 + 40);
+					case "singUP-alt":
+						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100 - 40);
+					case "singLEFTmiss":
+						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+					case "singRIGHTmiss":
+						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+					case "singDOWNmiss":
+						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+					case "singUPmiss":
+						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+					case "idle":
+						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+					case "idle-alt":
+						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+				}
+				camFollow.x -= boyfriend.cameraPosition[0] - boyfriendCameraOffset[0];
+				camFollow.y += boyfriend.cameraPosition[1] + boyfriendCameraOffset[1];
+			}
+		}
 
 		if (FlxG.keys.anyJustPressed(debugKeysCharacter) && !endingSong && !inCutscene) {
 			persistentUpdate = false;

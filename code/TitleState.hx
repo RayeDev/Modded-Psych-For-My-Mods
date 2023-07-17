@@ -631,6 +631,9 @@ class TitleState extends MusicBeatState
 				gfDance.animation.play('danceLeft');
 		}
 
+		// FlxG.camera.zoom += 0.03;
+		// FlxTween.tween(FlxG.camera, {zoom: 0}, 0.5);
+
 		if(!closedState) {
 			sickBeats++;
 			switch (sickBeats)
