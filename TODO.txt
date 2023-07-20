@@ -1,0 +1,9 @@
+‼ - High Thing
+! - Low Thing
+
+‼ Shader Support
+! Stage Editor
+! New UI
+! Porting to 0.7
+Custom Rating/Input's
+Stage UI's -> https://github.com/ShadowMario/FNF-PsychEngine/pull/12741
