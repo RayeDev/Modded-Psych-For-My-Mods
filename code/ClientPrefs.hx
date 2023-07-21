@@ -7,6 +7,7 @@ import flixel.graphics.FlxGraphic;
 import Controls;
 
 class ClientPrefs {
+	public static var shaders:Bool = true;
 	public static var loadCache:Bool = true;
 	public static var camMove:Bool = true;
 	public static var downScroll:Bool = false;
@@ -95,6 +96,7 @@ class ClientPrefs {
 	}
 
 	public static function saveSettings() {
+		FlxG.save.data.shaders = shaders;
 		FlxG.save.data.loadCache = loadCache;
 		FlxG.save.data.camMove = camMove;
 		FlxG.save.data.downScroll = downScroll;
@@ -143,6 +145,9 @@ class ClientPrefs {
 	}
 
 	public static function loadPrefs() {
+		if(FlxG.save.data.shaders != null) {
+			shaders = FlxG.save.data.shaders;
+		}
 		if(FlxG.save.data.loadCache != null){
 			loadCache = FlxG.save.data.loadCache;
 		}
