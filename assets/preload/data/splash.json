@@ -1,0 +1,17 @@
+{
+    "splashFile": "noteSplashes",
+    "xOffset": 20,
+    "yOffset": -10,
+    "xScale": 1,
+    "yScale": 1,
+    "alpha": 0.6,
+    "fps": 24,
+    "note1Purple": "note splash diamond purple 1",
+    "note1Blue": "note splash diamond blue 1",
+    "note1Green": "note splash diamond green 1",
+    "note1Red": "note splash diamond red 1",
+    "note2Purple": "note splash diamond purple 2",
+    "note2Blue": "note splash diamond blue 2",
+    "note2Green": "note splash diamond green 2",
+    "note2Red": "note splash diamond red 2"
+}

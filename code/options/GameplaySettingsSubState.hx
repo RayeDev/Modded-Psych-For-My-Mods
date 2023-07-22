@@ -70,6 +70,14 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			false); //Default value
 		addOption(option);
 
+		var option:Option = new Option('Rating System:',
+			"What should your Rating System be?", 
+			'ratingSystem', 
+			'string', 
+			'Psych',
+			['Psych', 'Forever', 'Andromeda', "Etterna", 'Mania', "None"]);
+		addOption(option);
+
 		var option:Option = new Option('Ghost Tapping',
 			"If checked, you won't get misses from pressing keys\nwhile there are no notes able to be hit.",
 			'ghostTapping',

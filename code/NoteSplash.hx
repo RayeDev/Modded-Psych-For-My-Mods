@@ -3,18 +3,48 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
+import haxe.Json;
+#if MODS_ALLOWED
+import sys.FileSystem;
+import sys.io.File;
+#end
+
+typedef SplashData =
+{
+	splashFile:String,
+	xOffset:Float,
+	yOffset:Float,
+	xScale:Float,
+	yScale:Float,
+	alpha:Float,
+	fps:Int,
+	note1Purple:String,
+	note1Blue:String,
+	note1Green:String,
+	note1Red:String,
+	note2Purple:String,
+	note2Blue:String,
+	note2Green:String,
+	note2Red:String
+}
 
 class NoteSplash extends FlxSprite
 {
 	public var colorSwap:ColorSwap = null;
 	private var idleAnim:String;
 	private var textureLoaded:String = null;
+	public static var splashJSON:SplashData;
 
 	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0) {
 		super(x, y);
 
-		var skin:String = 'noteSplashes';
-		if(PlayState.SONG.splashSkin != null && PlayState.SONG.splashSkin.length > 0) skin = PlayState.SONG.splashSkin;
+		splashJSON = Json.parse(Paths.getTextFromFile('data/splash.json'));
+
+		var skin:String = '';
+		if(splashJSON.splashFile == "" || splashJSON.splashFile == null)
+			skin = 'noteSplashes';
+		else
+			skin = splashJSON.splashFile;
 
 		loadAnims(skin);
 		
@@ -27,12 +57,12 @@ class NoteSplash extends FlxSprite
 
 	public function setupNoteSplash(x:Float, y:Float, note:Int = 0, texture:String = null, hueColor:Float = 0, satColor:Float = 0, brtColor:Float = 0) {
 		setPosition(x - Note.swagWidth * 0.95, y - Note.swagWidth);
-		alpha = 0.6;
+		alpha = splashJSON.alpha;
 
-		if(texture == null) {
+		if(texture == null || splashJSON.splashFile == "" || splashJSON.splashFile == null)
 			texture = 'noteSplashes';
-			if(PlayState.SONG.splashSkin != null && PlayState.SONG.splashSkin.length > 0) texture = PlayState.SONG.splashSkin;
-		}
+		else
+			texture = splashJSON.splashFile;
 
 		if(textureLoaded != texture) {
 			loadAnims(texture);
@@ -40,19 +70,36 @@ class NoteSplash extends FlxSprite
 		colorSwap.hue = hueColor;
 		colorSwap.saturation = satColor;
 		colorSwap.brightness = brtColor;
-		offset.set(10, -5);
+		offset.set(splashJSON.xOffset, splashJSON.yOffset);
+		scale.set(splashJSON.xScale, splashJSON.yScale);
 
 		animation.play('note' + note + '-' + 2, true);
-		if(animation.curAnim != null)animation.curAnim.frameRate = 24;
+		if(animation.curAnim != null && splashJSON.fps == 24)
+			animation.curAnim.frameRate = 24;
+		else if(animation.curAnim != null && splashJSON.fps != 24)
+			animation.curAnim.frameRate = splashJSON.fps;
 	}
 
 	function loadAnims(skin:String) {
 		frames = Paths.getSparrowAtlas(skin);
-		for (i in 1...3) {
-			animation.addByPrefix("note1-" + i, "note impact 2 blue", 24, false); //i have no idea
-			animation.addByPrefix("note2-" + i, "note impact 2 green", 24, false);
-			animation.addByPrefix("note0-" + i, "note impact 2 purple", 24, false);
-			animation.addByPrefix("note3-" + i, "note impact 2 red", 24, false);
+		if(splashJSON.fps == 24){
+			animation.addByPrefix("note1-1", splashJSON.note1Blue, 24, false);
+			animation.addByPrefix("note2-1", splashJSON.note1Green, 24, false);
+			animation.addByPrefix("note0-1", splashJSON.note1Purple, 24, false);
+			animation.addByPrefix("note3-1", splashJSON.note1Red, 24, false);
+			animation.addByPrefix("note1-2", splashJSON.note2Blue, 24, false);
+			animation.addByPrefix("note2-2", splashJSON.note2Green, 24, false);
+			animation.addByPrefix("note0-2", splashJSON.note2Purple, 24, false);
+			animation.addByPrefix("note3-2", splashJSON.note2Red, 24, false);
+		}else{
+			animation.addByPrefix("note1-1", splashJSON.note1Blue, splashJSON.fps, false);
+			animation.addByPrefix("note2-1", splashJSON.note1Green, splashJSON.fps, false);
+			animation.addByPrefix("note0-1", splashJSON.note1Purple, splashJSON.fps, false);
+			animation.addByPrefix("note3-1", splashJSON.note1Red, splashJSON.fps, false);
+			animation.addByPrefix("note1-2", splashJSON.note2Blue, splashJSON.fps, false);
+			animation.addByPrefix("note2-2", splashJSON.note2Green, splashJSON.fps, false);
+			animation.addByPrefix("note0-2", splashJSON.note2Purple, splashJSON.fps, false);
+			animation.addByPrefix("note3-2", splashJSON.note2Red, splashJSON.fps, false);
 		}
 	}
 

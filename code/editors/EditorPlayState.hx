@@ -19,6 +19,7 @@ import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import openfl.events.KeyboardEvent;
 import FunkinLua;
+import NoteSplash;
 
 using StringTools;
 
@@ -1019,8 +1020,11 @@ class EditorPlayState extends MusicBeatState
 	}
 
 	function spawnNoteSplash(x:Float, y:Float, data:Int, ?note:Note = null) {
-		var skin:String = 'noteSplashes';
-		if(PlayState.SONG.splashSkin != null && PlayState.SONG.splashSkin.length > 0) skin = PlayState.SONG.splashSkin;
+		var skin:String = '';
+		if(NoteSplash.splashJSON.splashFile == "" || NoteSplash.splashJSON.splashFile == null)
+			skin = 'noteSplashes';
+		else
+			skin = NoteSplash.splashJSON.splashFile;
 		
 		var hue:Float = ClientPrefs.arrowHSV[data % 4][0] / 360;
 		var sat:Float = ClientPrefs.arrowHSV[data % 4][1] / 100;

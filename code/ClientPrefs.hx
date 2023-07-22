@@ -7,6 +7,7 @@ import flixel.graphics.FlxGraphic;
 import Controls;
 
 class ClientPrefs {
+	public static var ratingSystem:String = "Psych";
 	public static var shaders:Bool = true;
 	public static var loadCache:Bool = true;
 	public static var camMove:Bool = true;
@@ -96,6 +97,7 @@ class ClientPrefs {
 	}
 
 	public static function saveSettings() {
+		FlxG.save.data.ratingSystem = ratingSystem;
 		FlxG.save.data.shaders = shaders;
 		FlxG.save.data.loadCache = loadCache;
 		FlxG.save.data.camMove = camMove;
@@ -145,6 +147,9 @@ class ClientPrefs {
 	}
 
 	public static function loadPrefs() {
+		if (FlxG.save.data.ratingSystem != null){
+			ratingSystem = FlxG.save.data.ratingSystem;
+		}
 		if(FlxG.save.data.shaders != null) {
 			shaders = FlxG.save.data.shaders;
 		}

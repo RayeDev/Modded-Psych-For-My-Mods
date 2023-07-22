@@ -58,6 +58,23 @@ class CoolUtil
 		return Math.max(min, Math.min(max, value));
 	}
 
+	public static function round(x:Float, n:Float):Float {
+		n = Math.pow(10, n);
+		x *= n;
+		if(x >= 0)
+			x = Math.floor(x + 0.5);
+		else
+			x = Math.ceil(x - 0.5);
+		return x / n;
+	}
+
+	public static function truncateFloat(number:Float, precision:Int):Float {
+		var num = number;
+		num = num * Math.pow(10, precision);
+		num = Math.floor(num) / Math.pow(10, precision);
+		return num;
+	}
+
 	public static function coolTextFile(path:String):Array<String>
 	{
 		var daList:Array<String> = [];
