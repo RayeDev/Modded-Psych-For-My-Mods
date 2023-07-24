@@ -72,7 +72,9 @@ class CharacterEditorState extends MusicBeatState
 	private var camMenu:FlxCamera;
 
 	var changeBGbutton:FlxButton;
-	var leHealthIcon:HealthIcon;
+	var leHealthIconNormal:HealthIcon;
+	var leHealthIconDead:HealthIcon;
+	var leHealthIconWin:HealthIcon;
 	var characterList:Array<String> = [];
 
 	var cameraFollowPointer:FlxSprite;
@@ -119,10 +121,26 @@ class CharacterEditorState extends MusicBeatState
 		add(healthBarBG);
 		healthBarBG.cameras = [camHUD];
 
-		leHealthIcon = new HealthIcon(char.healthIcon, false);
-		leHealthIcon.y = FlxG.height - 150;
-		add(leHealthIcon);
-		leHealthIcon.cameras = [camHUD];
+		leHealthIconNormal = new HealthIcon(char.healthIcon, false);
+		leHealthIconNormal.y = 570;
+		leHealthIconNormal.animation.curAnim.curFrame = 0;
+		leHealthIconNormal.cameras = [camHUD];
+
+		leHealthIconDead = new HealthIcon(char.healthIcon, false);
+		leHealthIconDead.x = 249.4;
+		leHealthIconDead.y = 570;
+		leHealthIconDead.animation.curAnim.curFrame = 1;
+		leHealthIconDead.cameras = [camHUD];
+
+		leHealthIconWin = new HealthIcon(char.healthIcon, false);
+		leHealthIconWin.x = 481;
+		leHealthIconWin.y = 570;
+		leHealthIconWin.animation.curAnim.curFrame = 2;
+		leHealthIconWin.cameras = [camHUD];
+
+		add(leHealthIconNormal);
+		add(leHealthIconWin);
+		add(leHealthIconDead);
 
 		dumbTexts = new FlxTypedGroup<FlxText>();
 		add(dumbTexts);
@@ -525,7 +543,7 @@ class CharacterEditorState extends MusicBeatState
 
 		var decideIconColor:FlxButton = new FlxButton(reloadImage.x, reloadImage.y + 30, "Get Icon Color", function()
 			{
-				var coolColor = FlxColor.fromInt(CoolUtil.dominantColor(leHealthIcon));
+				var coolColor = FlxColor.fromInt(CoolUtil.dominantColor(leHealthIconNormal));
 				healthColorStepperR.value = coolColor.red;
 				healthColorStepperG.value = coolColor.green;
 				healthColorStepperB.value = coolColor.blue;
@@ -534,7 +552,7 @@ class CharacterEditorState extends MusicBeatState
 				getEvent(FlxUINumericStepper.CHANGE_EVENT, healthColorStepperB, null);
 			});
 
-		healthIconInputText = new FlxUIInputText(15, imageInputText.y + 35, 75, leHealthIcon.getCharacter(), 8);
+		healthIconInputText = new FlxUIInputText(15, imageInputText.y + 35, 75, leHealthIconNormal.getCharacter(), 8);
 
 		singDurationStepper = new FlxUINumericStepper(15, healthIconInputText.y + 45, 0.1, 4, 0, 999, 1);
 
@@ -759,7 +777,9 @@ class CharacterEditorState extends MusicBeatState
 	override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>) {
 		if(id == FlxUIInputText.CHANGE_EVENT && (sender is FlxUIInputText)) {
 			if(sender == healthIconInputText) {
-				leHealthIcon.changeIcon(healthIconInputText.text);
+				leHealthIconNormal.changeIcon(healthIconInputText.text);
+				leHealthIconDead.changeIcon(healthIconInputText.text);
+				leHealthIconWin.changeIcon(healthIconInputText.text);
 				char.healthIcon = healthIconInputText.text;
 				updatePresence();
 			}
@@ -987,7 +1007,9 @@ class CharacterEditorState extends MusicBeatState
 			flipXCheckBox.checked = char.originalFlipX;
 			noAntialiasingCheckBox.checked = char.noAntialiasing;
 			resetHealthBarColor();
-			leHealthIcon.changeIcon(healthIconInputText.text);
+			leHealthIconNormal.changeIcon(healthIconInputText.text);
+			leHealthIconDead.changeIcon(healthIconInputText.text);
+			leHealthIconWin.changeIcon(healthIconInputText.text);
 			positionXStepper.value = char.positionArray[0];
 			positionYStepper.value = char.positionArray[1];
 			positionCameraXStepper.value = char.cameraPosition[0];
@@ -1081,7 +1103,7 @@ class CharacterEditorState extends MusicBeatState
 	function updatePresence() {
 		#if desktop
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("Character Editor", "Character: " + daAnim, leHealthIcon.getCharacter());
+		DiscordClient.changePresence("Character Editor", "Character: " + daAnim, leHealthIconNormal.getCharacter());
 		#end
 	}
 

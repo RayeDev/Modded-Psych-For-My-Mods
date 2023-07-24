@@ -18,15 +18,27 @@ import lime.utils.Assets;
 import flixel.system.FlxSound;
 import openfl.utils.Assets as OpenFlAssets;
 import WeekData;
+import haxe.Json;
 #if MODS_ALLOWED
 import sys.FileSystem;
+import sys.io.File;
 #end
 
 using StringTools;
 
+typedef FreeData =
+{
+	showIcons:Bool,
+	iconBop:Bool,
+	txtAlpha:Float,
+	iconAlpha:Float,
+	menuBG:String
+}
+
 class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
+	var freeJSON:FreeData;
 
 	var selector:FlxText;
 	private static var curSelected:Int = 0;
@@ -54,6 +66,8 @@ class FreeplayState extends MusicBeatState
 	{
 		//Paths.clearStoredMemory();
 		//Paths.clearUnusedMemory();
+
+		freeJSON = Json.parse(Paths.getTextFromFile('data/freeplay.json'));
 		
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;
@@ -101,7 +115,7 @@ class FreeplayState extends MusicBeatState
 			}
 		}*/
 
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		bg = new FlxSprite().loadGraphic(Paths.image(freeJSON.menuBG));
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
 		bg.screenCenter();
@@ -132,7 +146,7 @@ class FreeplayState extends MusicBeatState
 			Paths.currentModDirectory = songs[i].folder;
 			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
 			icon.sprTracker = songText;
-
+			icon.visible = freeJSON.showIcons;
 			// using a FlxGroup is too much fuss!
 			iconArray.push(icon);
 			add(icon);
@@ -399,8 +413,20 @@ class FreeplayState extends MusicBeatState
 			openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
+		if(freeJSON.iconBop){
+			var mult:Float = FlxMath.lerp(1, iconArray[curSelected].scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
+			iconArray[curSelected].scale.set(mult, mult);
+			iconArray[curSelected].updateHitbox();
+		}
+
 		super.update(elapsed);
 	}
+
+	override function beatHit(){
+		if(freeJSON.iconBop){
+			iconArray[curSelected].scale.set(1.2, 1.2);
+		}
+	} 
 
 	public static function destroyFreeplayVocals() {
 		if(vocals != null) {
@@ -466,7 +492,7 @@ class FreeplayState extends MusicBeatState
 
 		for (i in 0...iconArray.length)
 		{
-			iconArray[i].alpha = 0.6;
+			iconArray[i].alpha = freeJSON.iconAlpha;
 		}
 
 		iconArray[curSelected].alpha = 1;
@@ -476,7 +502,7 @@ class FreeplayState extends MusicBeatState
 			item.targetY = bullShit - curSelected;
 			bullShit++;
 
-			item.alpha = 0.6;
+			item.alpha = freeJSON.txtAlpha;
 			// item.setGraphicSize(Std.int(item.width * 0.8));
 
 			if (item.targetY == 0)

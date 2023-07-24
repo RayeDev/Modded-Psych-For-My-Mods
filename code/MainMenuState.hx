@@ -34,6 +34,7 @@ typedef MenuData =
 	center:Bool,
 	globalScaleX:Float,
 	globalScaleY:Float,
+	alphaSelect:Float,
 	menuBG:String,
 	menuMagenta:String,
 	bgColor:String,
@@ -65,7 +66,7 @@ typedef MenuData =
 	awardsScaleY:Float,
 	creditsScaleY:Float,
 	donateScaleY:Float,
-	optionsScaleY:Float,
+	optionsScaleY:Float
 }
 
 class MainMenuState extends MusicBeatState
@@ -95,7 +96,7 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
-		menuJSON = Json.parse(Paths.getTextFromFile('data/menu.json'));
+		menuJSON = Json.parse(Paths.getTextFromFile('data/mainmenu.json'));
 		#if MODS_ALLOWED
 		Paths.pushGlobalMods();
 		#end
@@ -380,7 +381,7 @@ class MainMenuState extends MusicBeatState
 				// FlxTween.tween(camGame, {alpha: 0}, 3, {ease: FlxEase.elasticInOut});
 			}
 			for (spr in menuItems)
-				spr.alpha = spr.ID == curSelected ? 1 : 0.2;
+				spr.alpha = spr.ID == curSelected ? 1 : menuJSON.alphaSelect;
 		});
 	}
 }

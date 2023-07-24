@@ -110,6 +110,7 @@ class PlayState extends MusicBeatState
 	#end
 
 	var andromedaAccuracy:Float = 100;
+	var kadeAccuracy:Float = 0.00;
 
 	public var BF_X:Float = 770;
 	public var BF_Y:Float = 100;
@@ -2288,7 +2289,14 @@ class PlayState extends MusicBeatState
 				+ " - Rank: " + ratingName;
 			case "Andromeda":
 				scoreTxt.text = 'Score: ' + songScore + ' | Accuracy: ${andromedaAccuracy}% | ${ratingName}';
-			case 'None':
+			case 'Etterna':
+				totalPlayed += 1;
+				kadeAccuracy = Math.max(0, totalNotesHit / totalPlayed * 100);
+				scoreTxt.text = 'Score: ' + songScore 
+				+ ' | Combo Breaks: ' + songMisses
+				+ ' | Accuracy: ' + CoolUtil.truncateFloat(kadeAccuracy, 2)
+				+ ' % | (${ratingFC}) ' + ratingName;
+			case "None":
 				scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses;
 		}
 
@@ -2854,9 +2862,11 @@ class PlayState extends MusicBeatState
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
 	var limoSpeed:Float = 0;
+	var elap:Float = 4;
 
 	override public function update(elapsed:Float)
 	{
+		elap += 0.04;
 		/*if (FlxG.keys.justPressed.NINE)
 		{
 			iconP1.swapOldIcon();
@@ -2909,6 +2919,11 @@ class PlayState extends MusicBeatState
 					}
 				}
 			case 'limo':
+				limo.x -= Math.sin(elap * 1.2) * 5;
+				dad.x -= Math.sin(elap * 1.2) * 5;
+				boyfriend.x -= Math.sin(elap * 1.2) * 5;
+				gf.x -= Math.sin(elap * 1.2) * 3;
+				boyfriend.x -= Math.sin(elap * 1.2) * 5;
 				if(!ClientPrefs.lowQuality) {
 					grpLimoParticles.forEach(function(spr:BGSprite) {
 						if(spr.animation.curAnim.finished) {
@@ -2917,6 +2932,7 @@ class PlayState extends MusicBeatState
 							spr.destroy();
 						}
 					});
+					bgLimo.x += Math.sin(elap * 1.2) * 3;
 
 					switch(limoKillingState) {
 						case 1:
@@ -2989,6 +3005,7 @@ class PlayState extends MusicBeatState
 						var dancers:Array<BackgroundDancer> = grpLimoDancers.members;
 						for (i in 0...dancers.length) {
 							dancers[i].x = (370 * i) + bgLimo.x + 280;
+							dancers[i].x += Math.sin(elap * 1.2) * 3;
 						}
 					}
 				}
@@ -3000,6 +3017,8 @@ class PlayState extends MusicBeatState
 						heyTimer = 0;
 					}
 				}
+			case 'schoolEvil':
+				dad.y += Math.sin(elap * 0.8) * 1.3;
 		}
 
 		if(!inCutscene) {
@@ -3097,58 +3116,30 @@ class PlayState extends MusicBeatState
 		if(ClientPrefs.camMove && !isCameraOnForcedPos){ //could be better but eh
 			if(!SONG.notes[curSection].mustHitSection){
 				switch(dad.animation.curAnim.name){ //SUPPORT FOR ALT ANIMATIONS WAJSKFHSDJKLFHASJKLDFHASJKLDFHASJKLDFHL
-					case "singLEFT":
+					case "singLEFT" | "singLEFT-loop" | "singLEFT-alt":
 						camFollow.set(dad.getMidpoint().x + 150 - 40, dad.getMidpoint().y - 100);
-					case "singRIGHT":
+					case "singRIGHT" | "singRIGHT-loop" | "singRIGHT-alt":
 						camFollow.set(dad.getMidpoint().x + 150 + 40, dad.getMidpoint().y - 100);
-					case "singDOWN":
+					case "singDOWN" | "singDOWN-loop" | "singDOWN-alt":
 						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 + 40);
-					case "singUP":
+					case "singUP" | "singUP-loop" | "singUP-alt":
 						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 - 40);
-					case "singLEFT-alt":
-						camFollow.set(dad.getMidpoint().x + 150 - 40, dad.getMidpoint().y - 100);
-					case "singRIGHT-alt":
-						camFollow.set(dad.getMidpoint().x + 150 + 40, dad.getMidpoint().y - 100);
-					case "singDOWN-alt":
-						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 + 40);
-					case "singUP-alt":
-						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 - 40);
-					case "idle":
-						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
-					case "idle-alt":
+					case "idle" | "idle-alt" | "idle-loop" | "singLEFTmiss" | "singDOWNmiss" | "singUPmiss" | "singRIGHTmiss":
 						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
 				}
 				camFollow.x += dad.cameraPosition[0] + opponentCameraOffset[0];
 				camFollow.y += dad.cameraPosition[1] + opponentCameraOffset[1];
 			}else{
 				switch(boyfriend.animation.curAnim.name){
-					case "singLEFT":
+					case "singLEFT" | "singLEFT-loop" | "singLEFT-alt":
 						camFollow.set(boyfriend.getMidpoint().x - 100 - 40, boyfriend.getMidpoint().y - 100);
-					case "singRIGHT":
+					case "singRIGHT" | "singRIGHT-loop" | "singRIGHT-alt":
 						camFollow.set(boyfriend.getMidpoint().x - 100 + 40, boyfriend.getMidpoint().y - 100);
-					case "singDOWN":
+					case "singDOWN" | "singDOWN-loop" | "singDOWN-alt":
 						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100 + 40);
-					case "singUP":
+					case "singUP" | "singUP-loop" | "singUP-alt":
 						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100 - 40);
-					case "singLEFT-alt":
-						camFollow.set(boyfriend.getMidpoint().x - 100 - 40, boyfriend.getMidpoint().y - 100);
-					case "singRIGHT-alt":
-						camFollow.set(boyfriend.getMidpoint().x - 100 + 40, boyfriend.getMidpoint().y - 100);
-					case "singDOWN-alt":
-						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100 + 40);
-					case "singUP-alt":
-						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100 - 40);
-					case "singLEFTmiss":
-						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
-					case "singRIGHTmiss":
-						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
-					case "singDOWNmiss":
-						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
-					case "singUPmiss":
-						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
-					case "idle":
-						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
-					case "idle-alt":
+					case "idle" | "idle-alt" | "idle-loop" | "singLEFTmiss" | "singDOWNmiss" | "singUPmiss" | "singRIGHTmiss":
 						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
 				}
 				camFollow.x -= boyfriend.cameraPosition[0] - boyfriendCameraOffset[0];
@@ -4198,8 +4189,9 @@ class PlayState extends MusicBeatState
 			if(!note.ratingDisabled)
 			{
 				songHits++;
-				totalPlayed++;
 				RecalculateRating(false);
+				if(ClientPrefs.ratingSystem == "Psych")
+					totalPlayed++;
 			}
 		}
 
@@ -4542,7 +4534,9 @@ class PlayState extends MusicBeatState
 		vocals.volume = 0;
 		if(!practiceMode) songScore -= 10;
 
-		totalPlayed++;
+		if(ClientPrefs.ratingSystem == "Psych")
+			totalPlayed++;
+
 		RecalculateRating(true);
 
 		var char:Character = boyfriend;
@@ -4582,7 +4576,8 @@ class PlayState extends MusicBeatState
 			if(!endingSong) {
 				songMisses++;
 			}
-			totalPlayed++;
+			if(ClientPrefs.ratingSystem == "Psych")
+				totalPlayed++;
 			RecalculateRating(true);
 
 			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
@@ -5207,7 +5202,7 @@ class PlayState extends MusicBeatState
 		var ret:Dynamic = callOnLuas('onRecalculateRating', [], false);
 		if(ret != FunkinLua.Function_Stop)
 		{
-			if(totalPlayed < 1) //Prevent divide by 0
+			if(totalPlayed < 1 && ClientPrefs.ratingSystem == "Psych") //Prevent divide by 0
 				ratingName = '?';
 			else
 			{
