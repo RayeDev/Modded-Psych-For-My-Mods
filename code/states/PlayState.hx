@@ -4133,6 +4133,7 @@ class PlayState extends MusicBeatState
 	private function popUpScore(note:Note = null):Void
 	{
 		var noteDiff:Float = Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.ratingOffset);
+		var kadeNoteDiff:Float = Math.abs(note.strumTime - Conductor.songPosition);
 		//trace(noteDiff, ' ' + Math.abs(note.strumTime - Conductor.songPosition));
 
 		// boyfriend.playAnim('hey');
@@ -4143,6 +4144,12 @@ class PlayState extends MusicBeatState
 		var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
 		coolText.screenCenter();
 		coolText.x = FlxG.width * 0.35;
+
+		Conductor.timeScale = Conductor.safeZoneOffset / 166;
+
+		var wife:Float = 0;
+		if (!note.isSustainNote)
+			wife = Etterna.wife3(kadeNoteDiff, Conductor.timeScale);
 		//
 
 		var rating:FlxSprite = new FlxSprite();
@@ -4151,9 +4158,8 @@ class PlayState extends MusicBeatState
 		//tryna do MS based judgment due to popular demand
 		var daRating:Rating = Conductor.judgeNote(note, noteDiff);
 		var ratingNum:Int = 0;
-
-		if (ClientPrefs.ratingSystem == "Etterna") //why not
-			totalNotesHit += Etterna.wife3(-noteDiff, Conductor.safeZoneOffset / 166) + daRating.ratingMod;
+		if (ClientPrefs.ratingSystem == "Etterna")
+			totalNotesHit += wife;
 		else
 			totalNotesHit += daRating.ratingMod;
 		note.ratingMod = daRating.ratingMod;

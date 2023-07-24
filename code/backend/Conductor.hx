@@ -25,10 +25,9 @@ class Conductor
 	public static var songPosition:Float=0;
 	public static var lastSongPos:Float;
 	public static var offset:Float = 0;
-
 	//public static var safeFrames:Int = 10;
 	public static var safeZoneOffset:Float = (ClientPrefs.safeFrames / 60) * 1000; // is calculated in create(), is safeFrames in milliseconds
-
+	public static var timeScale:Float = safeZoneOffset / 166;
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
 
 	public function new()
