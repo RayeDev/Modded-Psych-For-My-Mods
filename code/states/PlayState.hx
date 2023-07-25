@@ -62,6 +62,8 @@ import flixel.addons.display.FlxRuntimeShader;
 import openfl.filters.ShaderFilter;
 #end
 
+import misc.ForeverAccuracy;
+
 using StringTools;
 
 class PlayState extends MusicBeatState
@@ -92,7 +94,8 @@ class PlayState extends MusicBeatState
 	#end
 
 	var andromedaAccuracy:Float = 100;
-	var kadeAccuracy:Float = 0.00;
+	var kadeAccuracy:Float = 100;
+	var foreverAccuracy:Float = 100;
 
 	public var BF_X:Float = 770;
 	public var BF_Y:Float = 100;
@@ -2248,41 +2251,59 @@ class PlayState extends MusicBeatState
 		}
 	}
 
+	function updateAccuracy(name:String){
+		switch(name){
+			case "Etterna":
+				kadeAccuracy = Math.max(0, totalNotesHit / totalPlayed * 100);
+			case "Andromeda":
+				andromedaAccuracy = CoolUtil.truncateFloat(FlxMath.lerp(andromedaAccuracy,ratingPercent*100, FlxG.elapsed / (1/60) * 0.2),2);
+				if(ratingPercent<1 && andromedaAccuracy==100)andromedaAccuracy=99.99;
+				if(Math.abs((ratingPercent*100)-andromedaAccuracy) <= 0.1)
+					andromedaAccuracy=CoolUtil.truncateFloat(ratingPercent*100,2);
+			case "Forever":
+				foreverAccuracy = Math.floor(ForeverAccuracy.getAccuracy() * 100) / 100;
+			case "Psych" | "None":
+				Highscore.floorDecimal(ratingPercent * 100, 2);
+		}
+	}
+
 	public function updateScore(miss:Bool = false)
 	{
+		updateAccuracy(ClientPrefs.ratingSystem);
 		switch (ClientPrefs.ratingSystem)
 		{
 			case "Psych":
 				scoreTxt.text = 'Score: ' + songScore
 				+ ' | Misses: ' + songMisses
 				+ ' | Rating: ' + ratingName
-				+ (ratingName != '?' ? ' (${Highscore.floorDecimal(ratingPercent * 100, 2)}%) - $ratingFC' : '');
+				+ (ratingName != '?' ? ' (${ratingPercent}%) - $ratingFC' : '');
 			case "Forever":
 				if(ratingFC == null || ratingName == "?")
 					scoreTxt.text = "Score: " + songScore
-				+ " - Accuracy: " + CoolUtil.round((ratingPercent) * 100, 2)
+				+ " - Accuracy: " + foreverAccuracy
 				+ "% [SFC] - Combo Breaks: " + songMisses
 				+ " - Rank: N/A";
 				else
 				scoreTxt.text = "Score: " + songScore
-				+ " - Accuracy: " + CoolUtil.round((ratingPercent) * 100, 2)
+				+ " - Accuracy: " + foreverAccuracy
 				+ "% [" + ratingFC
 				+ "] - Combo Breaks: " + songMisses
 				+ " - Rank: " + ratingName;
 			case "Andromeda":
 				scoreTxt.text = 'Score: ' + songScore + ' | Accuracy: ${andromedaAccuracy}% | ${ratingName}';
 			case 'Etterna':
-				totalPlayed += 1;
-				kadeAccuracy = Math.max(0, totalNotesHit / totalPlayed * 100);
-				scoreTxt.text = 'Score: ' + songScore 
-				+ ' | Combo Breaks: ' + songMisses
-				+ ' | Accuracy: ' + CoolUtil.truncateFloat(kadeAccuracy, 2)
-				+ ' % | (${ratingFC}) ' + ratingName;
+				if(ratingFC == null || ratingName == "?")
+					scoreTxt.text = "Score: 0 | Combo Breaks: 0 | Accuracy: 0 % | N/A"
+				else
+					scoreTxt.text = 'Score: ' + songScore 
+					+ ' | Combo Breaks: ' + songMisses
+					+ ' | Accuracy: ${CoolUtil.truncateFloat(kadeAccuracy, 2)} % | (${ratingFC}) '
+					+ ratingName;
 			case "None":
 				scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses;
 		}
 
-		if(ClientPrefs.scoreZoom && !miss && !cpuControlled && ClientPrefs.ratingSystem == "Psych")
+		if(ClientPrefs.scoreZoom && !miss && !cpuControlled && ClientPrefs.ratingSystem == "Psych" || ClientPrefs.ratingSystem == "None")
 		{
 			if(scoreTxtTween != null) {
 				scoreTxtTween.cancel();
@@ -2855,21 +2876,13 @@ class PlayState extends MusicBeatState
 		}*/
 		callOnLuas('onUpdate', [elapsed]);
 
-		if(ClientPrefs.ratingSystem == "Andromeda")
-			updateScore(true);
-
-		andromedaAccuracy = CoolUtil.truncateFloat(FlxMath.lerp(andromedaAccuracy,ratingPercent*100, FlxG.elapsed / (1/60) * 0.2),2);
-		if(ratingPercent<1 && andromedaAccuracy==100)andromedaAccuracy=99.99;
-
-		if(Math.abs((ratingPercent*100)-andromedaAccuracy) <= 0.1)
-			andromedaAccuracy=CoolUtil.truncateFloat(ratingPercent*100,2);
-
 		switch (curStage)
 		{
 			case 'tank':
 				moveTank(elapsed);
 			case 'schoolEvil':
-				dad.y += Math.sin(elap * 0.8) * 1.3;
+				dad.x += Math.sin(elap * 0.8) * 1.5;
+				dad.y += Math.sin(2 * elap * 0.8) * 1.5 / 3;
 				if(!ClientPrefs.lowQuality && bgGhouls.animation.curAnim.finished) {
 					bgGhouls.visible = false;
 				}
@@ -2903,10 +2916,9 @@ class PlayState extends MusicBeatState
 				}
 			case 'limo':
 				limo.x -= Math.sin(elap * 1.2) * 5;
-				dad.x -= Math.sin(elap * 1.2) * 5;
-				boyfriend.x -= Math.sin(elap * 1.2) * 5;
+				dad.x -= Math.sin(elap * 1.2) * 5.5;
+				boyfriend.x -= Math.sin(elap * 1.2) * 5.5;
 				gf.x -= Math.sin(elap * 1.2) * 3;
-				boyfriend.x -= Math.sin(elap * 1.2) * 5;
 				if(!ClientPrefs.lowQuality) {
 					grpLimoParticles.forEach(function(spr:BGSprite) {
 						if(spr.animation.curAnim.finished) {
@@ -2926,6 +2938,7 @@ class PlayState extends MusicBeatState
 
 							var dancers:Array<BackgroundDancer> = grpLimoDancers.members;
 							for (i in 0...dancers.length) {
+								dancers[i].x += Math.sin(elap * 1.2) * 3;
 								if(dancers[i].x < FlxG.width * 1.5 && limoLight.x > (370 * i) + 130) {
 									switch(i) {
 										case 0 | 3:
@@ -2988,7 +3001,6 @@ class PlayState extends MusicBeatState
 						var dancers:Array<BackgroundDancer> = grpLimoDancers.members;
 						for (i in 0...dancers.length) {
 							dancers[i].x = (370 * i) + bgLimo.x + 280;
-							dancers[i].x += Math.sin(elap * 1.2) * 3;
 						}
 					}
 				}
@@ -4177,8 +4189,7 @@ class PlayState extends MusicBeatState
 			{
 				songHits++;
 				RecalculateRating(false);
-				if(ClientPrefs.ratingSystem == "Psych")
-					totalPlayed++;
+				totalPlayed++;
 			}
 		}
 
@@ -4520,9 +4531,8 @@ class PlayState extends MusicBeatState
 		songMisses++;
 		vocals.volume = 0;
 		if(!practiceMode) songScore -= 10;
-
-		if(ClientPrefs.ratingSystem == "Psych")
-			totalPlayed++;
+			
+		totalPlayed++;
 
 		RecalculateRating(true);
 
@@ -4563,8 +4573,7 @@ class PlayState extends MusicBeatState
 			if(!endingSong) {
 				songMisses++;
 			}
-			if(ClientPrefs.ratingSystem == "Psych")
-				totalPlayed++;
+			totalPlayed++;
 			RecalculateRating(true);
 
 			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
@@ -5189,7 +5198,7 @@ class PlayState extends MusicBeatState
 		var ret:Dynamic = callOnLuas('onRecalculateRating', [], false);
 		if(ret != FunkinLua.Function_Stop)
 		{
-			if(totalPlayed < 1 && ClientPrefs.ratingSystem == "Psych") //Prevent divide by 0
+			if(totalPlayed < 1) //Prevent divide by 0
 				ratingName = '?';
 			else
 			{
