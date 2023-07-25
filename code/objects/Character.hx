@@ -29,6 +29,7 @@ typedef CharacterFile = {
 
 	var position:Array<Float>;
 	var camera_position:Array<Float>;
+	var cam_move:Float;
 
 	var flip_x:Bool;
 	var no_antialiasing:Bool;
@@ -68,6 +69,7 @@ class Character extends FlxSprite
 
 	public var positionArray:Array<Float> = [0, 0];
 	public var cameraPosition:Array<Float> = [0, 0];
+	public var camMove:Float = 50;
 
 	public var hasMissAnimations:Bool = false;
 
@@ -176,6 +178,7 @@ class Character extends FlxSprite
 
 				positionArray = json.position;
 				cameraPosition = json.camera_position;
+				camMove = json.cam_move;
 
 				healthIcon = json.healthicon;
 				singDuration = json.sing_duration;

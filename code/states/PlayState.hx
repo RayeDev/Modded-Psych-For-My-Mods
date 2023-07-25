@@ -3110,13 +3110,13 @@ class PlayState extends MusicBeatState
 			if(!SONG.notes[curSection].mustHitSection){
 				switch(dad.animation.curAnim.name){ //SUPPORT FOR ALT ANIMATIONS WAJSKFHSDJKLFHASJKLDFHASJKLDFHASJKLDFHL
 					case "singLEFT" | "singLEFT-loop" | "singLEFT-alt":
-						camFollow.set(dad.getMidpoint().x + 150 - 40, dad.getMidpoint().y - 100);
+						camFollow.set(dad.getMidpoint().x + 150 - dad.camMove, dad.getMidpoint().y - 100);
 					case "singRIGHT" | "singRIGHT-loop" | "singRIGHT-alt":
-						camFollow.set(dad.getMidpoint().x + 150 + 40, dad.getMidpoint().y - 100);
+						camFollow.set(dad.getMidpoint().x + 150 + dad.camMove, dad.getMidpoint().y - 100);
 					case "singDOWN" | "singDOWN-loop" | "singDOWN-alt":
-						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 + 40);
+						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 + dad.camMove);
 					case "singUP" | "singUP-loop" | "singUP-alt":
-						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 - 40);
+						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 - dad.camMove);
 					case "idle" | "idle-alt" | "idle-loop" | "singLEFTmiss" | "singDOWNmiss" | "singUPmiss" | "singRIGHTmiss":
 						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
 				}
@@ -3125,13 +3125,13 @@ class PlayState extends MusicBeatState
 			}else{
 				switch(boyfriend.animation.curAnim.name){
 					case "singLEFT" | "singLEFT-loop" | "singLEFT-alt":
-						camFollow.set(boyfriend.getMidpoint().x - 100 - 40, boyfriend.getMidpoint().y - 100);
+						camFollow.set(boyfriend.getMidpoint().x - 100 - boyfriend.camMove, boyfriend.getMidpoint().y - 100);
 					case "singRIGHT" | "singRIGHT-loop" | "singRIGHT-alt":
-						camFollow.set(boyfriend.getMidpoint().x - 100 + 40, boyfriend.getMidpoint().y - 100);
+						camFollow.set(boyfriend.getMidpoint().x - 100 + boyfriend.camMove, boyfriend.getMidpoint().y - 100);
 					case "singDOWN" | "singDOWN-loop" | "singDOWN-alt":
-						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100 + 40);
+						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100 + boyfriend.camMove);
 					case "singUP" | "singUP-loop" | "singUP-alt":
-						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100 - 40);
+						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100 - boyfriend.camMove);
 					case "idle" | "idle-alt" | "idle-loop" | "singLEFTmiss" | "singDOWNmiss" | "singUPmiss" | "singRIGHTmiss":
 						camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
 				}
