@@ -62,8 +62,6 @@ import flixel.addons.display.FlxRuntimeShader;
 import openfl.filters.ShaderFilter;
 #end
 
-import misc.ForeverAccuracy;
-
 using StringTools;
 
 class PlayState extends MusicBeatState
@@ -71,7 +69,18 @@ class PlayState extends MusicBeatState
 	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
 
-	public static var ratingStuff:Array<Dynamic>;
+	public static var ratingStuff:Array<Dynamic> = [
+		['You Suck!', 0.2], //From 0% to 19%
+		['Shit', 0.4], //From 20% to 39%
+		['Bad', 0.5], //From 40% to 49%
+		['Bruh', 0.6], //From 50% to 59%
+		['Meh', 0.69], //From 60% to 68%
+		['Nice', 0.7], //69%
+		['Good', 0.8], //From 70% to 79%
+		['Great', 0.9], //From 80% to 89%
+		['Sick!', 1], //From 90% to 99%
+		['Perfect!!', 1] //100%
+	];
 	public var modchartTweens:Map<String, FlxTween> = new Map<String, FlxTween>();
 	public var modchartSprites:Map<String, ModchartSprite> = new Map<String, ModchartSprite>();
 	public var modchartTimers:Map<String, FlxTimer> = new Map<String, FlxTimer>();
@@ -92,10 +101,6 @@ class PlayState extends MusicBeatState
 	public var gfMap:Map<String, Character> = new Map<String, Character>();
 	public var variables:Map<String, Dynamic> = new Map<String, Dynamic>();
 	#end
-
-	var andromedaAccuracy:Float = 100;
-	var kadeAccuracy:Float = 100;
-	var foreverAccuracy:Float = 100;
 
 	public var BF_X:Float = 770;
 	public var BF_Y:Float = 100;
@@ -329,23 +334,6 @@ class PlayState extends MusicBeatState
 		rating.score = 50;
 		rating.noteSplash = false;
 		ratingsData.push(rating);
-
-		ratingStuff = Ratings.psychRatings;
-		switch (ClientPrefs.ratingSystem)
-		{
-			case "Psych":
-				ratingStuff = Ratings.psychRatings;
-			// GO CHECK FOREVER ENGINE OUT!! https://github.com/Yoshubs/Forever-Engine-Legacy (trashed)
-			case "Forever":
-				ratingStuff = Ratings.foreverRatings;
-			// ALSO TRY ANDROMEDA!! https://github.com/nebulazorua/andromeda-engine-legacy (legacy)
-			case "Andromeda":
-				ratingStuff = Ratings.andromedaRatings;
-			case "Etterna":
-				ratingStuff = Ratings.accurateRatings;
-			case 'Mania':
-				ratingStuff = Ratings.maniaRatings;
-		}
 
 		// For the "Just the Two of Us" achievement
 		for (i in 0...keysArray.length)
@@ -2251,70 +2239,20 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	function updateAccuracy(name:String){
-		switch(name){
-			case "Etterna":
-				kadeAccuracy = Math.max(0, totalNotesHit / totalPlayed * 100);
-			case "Andromeda":
-				andromedaAccuracy = CoolUtil.truncateFloat(FlxMath.lerp(andromedaAccuracy,ratingPercent*100, FlxG.elapsed / (1/60) * 0.2),2);
-				if(ratingPercent<1 && andromedaAccuracy==100)andromedaAccuracy=99.99;
-				if(Math.abs((ratingPercent*100)-andromedaAccuracy) <= 0.1)
-					andromedaAccuracy=CoolUtil.truncateFloat(ratingPercent*100,2);
-			case "Forever":
-				foreverAccuracy = Math.floor(ForeverAccuracy.getAccuracy() * 100) / 100;
-			case "Psych" | "None":
-				Highscore.floorDecimal(ratingPercent * 100, 2);
-		}
-	}
-
 	public function updateScore(miss:Bool = false)
 	{
-		updateAccuracy(ClientPrefs.ratingSystem);
-		switch (ClientPrefs.ratingSystem)
-		{
-			case "Psych":
-				scoreTxt.text = 'Score: ' + songScore
-				+ ' | Misses: ' + songMisses
-				+ ' | Rating: ' + ratingName
-				+ (ratingName != '?' ? ' (${ratingPercent}%) - $ratingFC' : '');
-			case "Forever":
-				if(ratingFC == null || ratingName == "?")
-					scoreTxt.text = "Score: " + songScore
-				+ " - Accuracy: " + foreverAccuracy
-				+ "% [SFC] - Combo Breaks: " + songMisses
-				+ " - Rank: N/A";
-				else
-				scoreTxt.text = "Score: " + songScore
-				+ " - Accuracy: " + foreverAccuracy
-				+ "% [" + ratingFC
-				+ "] - Combo Breaks: " + songMisses
-				+ " - Rank: " + ratingName;
-			case "Andromeda":
-				scoreTxt.text = 'Score: ' + songScore + ' | Accuracy: ${andromedaAccuracy}% | ${ratingName}';
-			case 'Etterna':
-				if(ratingFC == null || ratingName == "?")
-					scoreTxt.text = "Score: 0 | Combo Breaks: 0 | Accuracy: 0 % | N/A"
-				else
-					scoreTxt.text = 'Score: ' + songScore 
-					+ ' | Combo Breaks: ' + songMisses
-					+ ' | Accuracy: ${CoolUtil.truncateFloat(kadeAccuracy, 2)} % | (${ratingFC}) '
-					+ ratingName;
-			case "None":
-				scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses;
-		}
+		scoreTxt.text = 'Score: ' + songScore
+		+ ' | Misses: ' + songMisses
+		+ ' | Rating: ' + ratingName
+		+ (ratingName != '?' ? ' (${Highscore.floorDecimal(ratingPercent * 100, 2)}%) - $ratingFC' : '');
 
-		if(ClientPrefs.scoreZoom && !miss && !cpuControlled && ClientPrefs.ratingSystem == "Psych" || ClientPrefs.ratingSystem == "None")
+		if(ClientPrefs.scoreZoom && !miss && !cpuControlled)
 		{
 			if(scoreTxtTween != null) {
 				scoreTxtTween.cancel();
 			}
-			if (ClientPrefs.ratingSystem == "None"){
-				scoreTxt.scale.x = 1.095;
-				scoreTxt.scale.y = 1.095;
-			}else{
-				scoreTxt.scale.x = 1.075;
-				scoreTxt.scale.y = 1.075;
-			}
+			scoreTxt.scale.x = 1.075;
+			scoreTxt.scale.y = 1.075;
 			scoreTxtTween = FlxTween.tween(scoreTxt.scale, {x: 1, y: 1}, 0.2, {
 				onComplete: function(twn:FlxTween) {
 					scoreTxtTween = null;
@@ -4145,7 +4083,6 @@ class PlayState extends MusicBeatState
 	private function popUpScore(note:Note = null):Void
 	{
 		var noteDiff:Float = Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.ratingOffset);
-		var kadeNoteDiff:Float = Math.abs(note.strumTime - Conductor.songPosition);
 		//trace(noteDiff, ' ' + Math.abs(note.strumTime - Conductor.songPosition));
 
 		// boyfriend.playAnim('hey');
@@ -4156,12 +4093,6 @@ class PlayState extends MusicBeatState
 		var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
 		coolText.screenCenter();
 		coolText.x = FlxG.width * 0.35;
-
-		Conductor.timeScale = Conductor.safeZoneOffset / 166;
-
-		var wife:Float = 0;
-		if (!note.isSustainNote)
-			wife = Etterna.wife3(kadeNoteDiff, Conductor.timeScale);
 		//
 
 		var rating:FlxSprite = new FlxSprite();
@@ -4170,10 +4101,7 @@ class PlayState extends MusicBeatState
 		//tryna do MS based judgment due to popular demand
 		var daRating:Rating = Conductor.judgeNote(note, noteDiff);
 		var ratingNum:Int = 0;
-		if (ClientPrefs.ratingSystem == "Etterna")
-			totalNotesHit += wife;
-		else
-			totalNotesHit += daRating.ratingMod;
+		totalNotesHit += daRating.ratingMod;
 		note.ratingMod = daRating.ratingMod;
 		if(!note.ratingDisabled) daRating.increase();
 		note.rating = daRating.name;
@@ -5205,22 +5133,6 @@ class PlayState extends MusicBeatState
 				// Rating Percent
 				ratingPercent = Math.min(1, Math.max(0, totalNotesHit / totalPlayed));
 				//trace((totalNotesHit / totalPlayed) + ', Total: ' + totalPlayed + ', notes hit: ' + totalNotesHit);
-				var ratings:Array<Dynamic> = Ratings.psychRatings;
-				switch (ClientPrefs.ratingSystem)
-				{
-					case "Psych":
-						ratings = Ratings.psychRatings;
-					// GO CHECK FOREVER ENGINE OUT!! https://github.com/Yoshubs/Forever-Engine-Legacy (trashed)
-					case "Forever":
-						ratings = Ratings.foreverRatings;
-					// ALSO TRY ANDROMEDA!! https://github.com/nebulazorua/andromeda-engine-legacy (legacy)
-					case "Andromeda":
-						ratings = Ratings.andromedaRatings;
-					case "Etterna":
-						ratings = Ratings.accurateRatings;
-					case 'Mania':
-						ratings = Ratings.maniaRatings;
-				}
 
 				// Rating Name
 				if(ratingPercent >= 1)

@@ -48,6 +48,4 @@ import substates.GameplayChangersSubstate;
 import substates.ResetScoreSubState;
 
 import misc.FunkinLua;
-import misc.Ratings;
-import misc.Etterna;
 import misc.PlayerSettings;
