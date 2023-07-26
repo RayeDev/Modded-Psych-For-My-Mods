@@ -25,6 +25,7 @@ typedef SwagSong =
 	var gfVersion:String;
 	var stage:String;
 
+	var arrowSkin:String;
 	var validScore:Bool;
 }
 

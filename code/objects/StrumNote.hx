@@ -6,23 +6,8 @@ import flixel.graphics.frames.FlxAtlasFrames;
 
 using StringTools;
 
-typedef StrumData = {
-	arrowLEFT:String,
-	arrowDOWN:String,
-	arrowRIGHT:String,
-	downConfirm:String,
-	downPress:String,
-	upConfirm:String,
-	upPress:String,
-	leftConfirm:String,
-	leftPress:String,
-	rightConfirm:String,
-	rightPress:String
-}
-
 class StrumNote extends FlxSprite
 {
-	public static var strumJSON:StrumData;
 	private var colorSwap:ColorSwap;
 	public var resetAnim:Float = 0;
 	private var noteData:Int = 0;
@@ -42,7 +27,6 @@ class StrumNote extends FlxSprite
 	}
 
 	public function new(x:Float, y:Float, leData:Int, player:Int) {
-		strumJSON = Json.parse(Paths.getTextFromFile('images/${ClientPrefs.noteskin}.json'));
 		colorSwap = new ColorSwap();
 		shader = colorSwap.shader;
 		noteData = leData;
@@ -50,7 +34,8 @@ class StrumNote extends FlxSprite
 		this.noteData = leData;
 		super(x, y);
 
-		var skin:String = ClientPrefs.noteskin;
+		var skin:String = 'NOTE_assets';
+		if(PlayState.SONG.arrowSkin != null && PlayState.SONG.arrowSkin.length > 1) skin = PlayState.SONG.arrowSkin;
 		texture = skin; //Load texture and anims
 
 		scrollFactor.set();
@@ -98,10 +83,10 @@ class StrumNote extends FlxSprite
 		else
 		{
 			frames = Paths.getSparrowAtlas(texture);
-			animation.addByPrefix('green', strumJSON.arrowUP);
-			animation.addByPrefix('blue', strumJSON.arrowDOWN);
-			animation.addByPrefix('purple', strumJSON.arrowLEFT);
-			animation.addByPrefix('red', strumJSON.arrowRIGHT);
+			animation.addByPrefix('green', 'arrowUP');
+			animation.addByPrefix('blue', 'arrowDOWN');
+			animation.addByPrefix('purple', 'arrowLEFT');
+			animation.addByPrefix('red', 'arrowRIGHT');
 
 			antialiasing = ClientPrefs.globalAntialiasing;
 			setGraphicSize(Std.int(width * 0.7));
@@ -109,21 +94,21 @@ class StrumNote extends FlxSprite
 			switch (Math.abs(noteData))
 			{
 				case 0:
-					animation.addByPrefix('static', strumJSON.arrowLEFT);
-					animation.addByPrefix('pressed', strumJSON.leftPress, 24, false);
-					animation.addByPrefix('confirm', strumJSON.leftConfirm, 24, false);
+					animation.addByPrefix('static', 'arrowLEFT');
+					animation.addByPrefix('pressed', 'left press', 24, false);
+					animation.addByPrefix('confirm', 'left confirm', 24, false);
 				case 1:
-					animation.addByPrefix('static', strumJSON.arrowDOWN);
-					animation.addByPrefix('pressed', strumJSON.downPress, 24, false);
-					animation.addByPrefix('confirm', strumJSON.downConfirm, 24, false);
+					animation.addByPrefix('static', 'arrowDOWN');
+					animation.addByPrefix('pressed', 'down press', 24, false);
+					animation.addByPrefix('confirm', 'down confirm', 24, false);
 				case 2:
-					animation.addByPrefix('static', strumJSON.arrowUP);
-					animation.addByPrefix('pressed', strumJSON.upConfirm, 24, false);
-					animation.addByPrefix('confirm', strumJSON.upPress, 24, false);
+					animation.addByPrefix('static', 'arrowUP');
+					animation.addByPrefix('pressed', 'up press', 24, false);
+					animation.addByPrefix('confirm', 'up confirm', 24, false);
 				case 3:
-					animation.addByPrefix('static', strumJSON.arrowRIGHT);
-					animation.addByPrefix('pressed', strumJSON.rightPress, 24, false);
-					animation.addByPrefix('confirm', strumJSON.rightConfirm, 24, false);
+					animation.addByPrefix('static', 'arrowRIGHT');
+					animation.addByPrefix('pressed', 'right press', 24, false);
+					animation.addByPrefix('confirm', 'right confirm', 24, false);
 			}
 		}
 		updateHitbox();

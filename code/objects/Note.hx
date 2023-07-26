@@ -6,7 +6,6 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 import flash.display.BitmapData;
-import haxe.Json;
 
 using StringTools;
 
@@ -17,24 +16,8 @@ typedef EventNote = {
 	value2:String
 }
 
-typedef NoteData = {
-	blue:String,
-	green:String,
-	purple:String,
-	red:String,
-	blueHoldPiece:String,
-	greenHoldPiece:String,
-	prupleHoldPiece:String,
-	redHoldPiece:String,
-	blueHoldEnd:String,
-	greenHoldEnd:String,
-	prupleHoldEnd:String,
-	redHoldEnd:String
-}
-
 class Note extends FlxSprite
 {
-	public static var noteJSON:NoteData;
 	public var extraData:Map<String,Dynamic> = [];
 
 	public var strumTime:Float = 0;
@@ -177,8 +160,6 @@ class Note extends FlxSprite
 	{
 		super();
 
-		noteJSON = Json.parse(Paths.getTextFromFile('images/${ClientPrefs.noteskin}.json'));
-
 		if (prevNote == null)
 			prevNote = this;
 
@@ -299,8 +280,9 @@ class Note extends FlxSprite
 
 		var skin:String = texture;
 		if(texture.length < 1) {
+			skin = PlayState.SONG.arrowSkin;
 			if(skin == null || skin.length < 1) {
-				skin = ClientPrefs.noteskin;
+				skin = 'NOTE_assets';
 			}
 		}
 
@@ -363,22 +345,22 @@ class Note extends FlxSprite
 	}
 
 	function loadNoteAnims() {
-		animation.addByPrefix('greenScroll', noteJSON.green);
-		animation.addByPrefix('redScroll', noteJSON.red);
-		animation.addByPrefix('blueScroll', noteJSON.blue);
-		animation.addByPrefix('purpleScroll', noteJSON.purple);
-		
+		animation.addByPrefix('greenScroll', 'green0');
+		animation.addByPrefix('redScroll', 'red0');
+		animation.addByPrefix('blueScroll', 'blue0');
+		animation.addByPrefix('purpleScroll', 'purple0');
+
 		if (isSustainNote)
 		{
-			animation.addByPrefix('purpleholdend', noteJSON.prupleHoldEnd);
-			animation.addByPrefix('greenholdend', noteJSON.greenHoldEnd);
-			animation.addByPrefix('redholdend', noteJSON.redHoldEnd);
-			animation.addByPrefix('blueholdend', noteJSON.greenHoldEnd);
-		
-			animation.addByPrefix('purplehold', noteJSON.prupleHoldPiece);
-			animation.addByPrefix('greenhold', noteJSON.greenHoldPiece);
-			animation.addByPrefix('redhold', noteJSON.redHoldPiece);
-			animation.addByPrefix('bluehold', noteJSON.blueHoldPiece);
+			animation.addByPrefix('purpleholdend', 'pruple end hold');
+			animation.addByPrefix('greenholdend', 'green hold end');
+			animation.addByPrefix('redholdend', 'red hold end');
+			animation.addByPrefix('blueholdend', 'blue hold end');
+
+			animation.addByPrefix('purplehold', 'purple hold piece');
+			animation.addByPrefix('greenhold', 'green hold piece');
+			animation.addByPrefix('redhold', 'red hold piece');
+			animation.addByPrefix('bluehold', 'blue hold piece');
 		}
 
 		setGraphicSize(Std.int(width * 0.7));
