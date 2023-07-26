@@ -587,6 +587,7 @@ class CharacterEditorState extends MusicBeatState
 		tab_group.add(positionXStepper);
 		tab_group.add(positionYStepper);
 		tab_group.add(positionCameraXStepper);
+		tab_group.add(positionCameraYStepper);
 		tab_group.add(positionCameraDirectionStepper);
 		tab_group.add(healthColorStepperR);
 		tab_group.add(healthColorStepperG);

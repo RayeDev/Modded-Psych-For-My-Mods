@@ -178,7 +178,8 @@ class Character extends FlxSprite
 
 				positionArray = json.position;
 				cameraPosition = json.camera_position;
-				camMove = json.cam_move;
+				if(Std.isOfType(json.cam_move, Int))
+					camMove = json.cam_move;
 
 				healthIcon = json.healthicon;
 				singDuration = json.sing_duration;
