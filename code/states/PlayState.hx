@@ -197,6 +197,10 @@ class PlayState extends MusicBeatState
 	public var camOther:FlxCamera;
 	public var cameraSpeed:Float = 1;
 
+	var week6Shader:Week6Shader = null;
+	var pixelPerfect:PixelYoshiShader = null;
+	var hasPixelShader:Bool = false;
+
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 	var dialogueJson:DialogueFile = null;
 
@@ -429,6 +433,7 @@ class PlayState extends MusicBeatState
 				directory: "",
 				defaultZoom: 0.9,
 				isPixelStage: false,
+				hasPixelPerfect: false,
 
 				boyfriend: [770, 100],
 				girlfriend: [400, 130],
@@ -444,6 +449,7 @@ class PlayState extends MusicBeatState
 
 		defaultCamZoom = stageData.defaultZoom;
 		isPixelStage = stageData.isPixelStage;
+		hasPixelShader = stageData.hasPixelPerfect;
 		BF_X = stageData.boyfriend[0];
 		BF_Y = stageData.boyfriend[1];
 		GF_X = stageData.girlfriend[0];
@@ -469,6 +475,12 @@ class PlayState extends MusicBeatState
 		boyfriendGroup = new FlxSpriteGroup(BF_X, BF_Y);
 		dadGroup = new FlxSpriteGroup(DAD_X, DAD_Y);
 		gfGroup = new FlxSpriteGroup(GF_X, GF_Y);
+
+		if(hasPixelShader && ClientPrefs.shaders && isPixelStage){ //3 things need to be on ahjdhgajskdfl
+			pixelPerfect = new PixelYoshiShader();
+			camGame.setFilters([new ShaderFilter(pixelPerfect)]);
+			camHUD.setFilters([new ShaderFilter(pixelPerfect)]);
+		}
 
 		switch (curStage)
 		{
@@ -643,6 +655,11 @@ class PlayState extends MusicBeatState
 				add(evilSnow);
 
 			case 'school': //Week 6 - Senpai, Roses
+				if(ClientPrefs.shaders){
+					week6Shader = new Week6Shader();
+					camGame.setFilters([new ShaderFilter(week6Shader)]);
+					camHUD.setFilters([new ShaderFilter(week6Shader)]);
+				}
 				GameOverSubstate.deathSoundName = 'fnf_loss_sfx-pixel';
 				GameOverSubstate.loopSoundName = 'gameOver-pixel';
 				GameOverSubstate.endSoundName = 'gameOverEnd-pixel';
@@ -707,6 +724,11 @@ class PlayState extends MusicBeatState
 				}
 
 			case 'schoolEvil': //Week 6 - Thorns
+				if(ClientPrefs.shaders){
+					week6Shader = new Week6Shader();
+					camGame.setFilters([new ShaderFilter(week6Shader)]);
+					camHUD.setFilters([new ShaderFilter(week6Shader)]);
+				}
 				GameOverSubstate.deathSoundName = 'fnf_loss_sfx-pixel';
 				GameOverSubstate.loopSoundName = 'gameOver-pixel';
 				GameOverSubstate.endSoundName = 'gameOverEnd-pixel';
@@ -967,12 +989,12 @@ class PlayState extends MusicBeatState
 				addBehindDad(evilTrail);
 		}
 
-		var file:String = Paths.json(songName + '/dialogue'); //Checks for json/Psych Engine dialogue
+		var file:String = Paths.json('chart/${songName}/dialogue'); //Checks for json/Psych Engine dialogue
 		if (OpenFlAssets.exists(file)) {
 			dialogueJson = DialogueBoxPsych.parseDialogue(file);
 		}
 
-		var file:String = Paths.txt(songName + '/' + songName + 'Dialogue'); //Checks for vanilla/Senpai dialogue
+		var file:String = Paths.txt('chart/${songName}/${songName}Dialogue'); //Checks for vanilla/Senpai dialogue
 		if (OpenFlAssets.exists(file)) {
 			dialogue = CoolUtil.coolTextFile(file);
 		}
@@ -2819,8 +2841,8 @@ class PlayState extends MusicBeatState
 			case 'tank':
 				moveTank(elapsed);
 			case 'schoolEvil':
-				dad.x += Math.sin(elap * 0.8) * 1.5;
-				dad.y += Math.sin(2 * elap * 0.8) * 1.5 / 3;
+				dad.x += Math.sin(elap * 0.8) * 3;
+				dad.y += Math.sin(2 * elap * 0.8) * 3 / 3;
 				if(!ClientPrefs.lowQuality && bgGhouls.animation.curAnim.finished) {
 					bgGhouls.visible = false;
 				}
