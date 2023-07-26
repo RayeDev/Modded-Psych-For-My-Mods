@@ -38,7 +38,7 @@ class NoteSplash extends FlxSprite
 	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0) {
 		super(x, y);
 
-		splashJSON = Json.parse(Paths.getTextFromFile('data/splash.json'));
+		splashJSON = Json.parse(Paths.getTextFromFile('data/JSON/splash.json'));
 
 		var skin:String = '';
 		if(splashJSON.splashFile == "" || splashJSON.splashFile == null)

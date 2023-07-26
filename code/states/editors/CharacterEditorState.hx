@@ -560,7 +560,7 @@ class CharacterEditorState extends MusicBeatState
 
 		positionCameraXStepper = new FlxUINumericStepper(positionXStepper.x, positionXStepper.y + 40, 10, char.cameraPosition[0], -9000, 9000, 0);
 		positionCameraYStepper = new FlxUINumericStepper(positionYStepper.x, positionYStepper.y + 40, 10, char.cameraPosition[1], -9000, 9000, 0);
-		positionCameraDirectionStepper = new FlxUINumericStepper(positionYStepper.x, positionYStepper.y + 20, 10, char.cameraPosition[1], -9000, 9000, 0);
+		positionCameraDirectionStepper = new FlxUINumericStepper(positionYStepper.x, positionCameraYStepper.y + 20, 10, char.cameraPosition[1], -9000, 9000, 0);
 
 		var saveCharacterButton:FlxButton = new FlxButton(reloadImage.x, noAntialiasingCheckBox.y + 40, "Save Character", function() {
 			saveCharacter();

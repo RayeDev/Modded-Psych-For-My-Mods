@@ -62,7 +62,7 @@ class FreeplayState extends MusicBeatState
 		//Paths.clearStoredMemory();
 		//Paths.clearUnusedMemory();
 
-		freeJSON = Json.parse(Paths.getTextFromFile('data/freeplay.json'));
+		freeJSON = Json.parse(Paths.getTextFromFile('data/JSON/freeplay.json'));
 		
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;

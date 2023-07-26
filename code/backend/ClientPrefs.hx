@@ -6,6 +6,7 @@ import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
 
 class ClientPrefs {
+	public static var noteskin:String = "Default";
 	public static var shaders:Bool = true;
 	public static var camMove:Bool = true;
 	public static var downScroll:Bool = false;
@@ -94,6 +95,7 @@ class ClientPrefs {
 	}
 
 	public static function saveSettings() {
+		FlxG.save.data.noteskin = noteskin;
 		FlxG.save.data.shaders = shaders;
 		FlxG.save.data.camMove = camMove;
 		FlxG.save.data.downScroll = downScroll;
@@ -142,40 +144,32 @@ class ClientPrefs {
 	}
 
 	public static function loadPrefs() {
-		if(FlxG.save.data.shaders != null) {
+		if(FlxG.save.data.noteskin != null)
+			noteskin = FlxG.save.data.noteskin;
+		if(FlxG.save.data.shaders != null)
 			shaders = FlxG.save.data.shaders;
-		}
-		if(FlxG.save.data.camMove != null){
+		if(FlxG.save.data.camMove != null)
 			camMove = FlxG.save.data.camMove;
-		}
-		if(FlxG.save.data.downScroll != null) {
+		if(FlxG.save.data.downScroll != null)
 			downScroll = FlxG.save.data.downScroll;
-		}
-		if(FlxG.save.data.middleScroll != null) {
+		if(FlxG.save.data.middleScroll != null)
 			middleScroll = FlxG.save.data.middleScroll;
-		}
-		if(FlxG.save.data.opponentStrums != null) {
+		if(FlxG.save.data.opponentStrums != null)
 			opponentStrums = FlxG.save.data.opponentStrums;
-		}
 		if(FlxG.save.data.showFPS != null) {
 			showFPS = FlxG.save.data.showFPS;
-			if(Main.fpsVar != null) {
+			if(Main.fpsVar != null)
 				Main.fpsVar.visible = showFPS;
-			}
 		}
-		if(FlxG.save.data.flashing != null) {
+		if(FlxG.save.data.flashing != null)
 			flashing = FlxG.save.data.flashing;
-		}
-		if(FlxG.save.data.globalAntialiasing != null) {
+		if(FlxG.save.data.globalAntialiasing != null)
 			globalAntialiasing = FlxG.save.data.globalAntialiasing;
-		}
-		if(FlxG.save.data.noteSplashes != null) {
+		if(FlxG.save.data.noteSplashes != null)
 			noteSplashes = FlxG.save.data.noteSplashes;
-		}
-		if(FlxG.save.data.lowQuality != null) {
+		if(FlxG.save.data.lowQuality != null)
 			lowQuality = FlxG.save.data.lowQuality;
-		}
-		if(FlxG.save.data.framerate != null) {
+		if(FlxG.save.data.framerate != null){
 			framerate = FlxG.save.data.framerate;
 			if(framerate > FlxG.drawFramerate) {
 				FlxG.updateFramerate = framerate;
@@ -185,97 +179,63 @@ class ClientPrefs {
 				FlxG.updateFramerate = framerate;
 			}
 		}
-		/*if(FlxG.save.data.cursing != null) {
-			cursing = FlxG.save.data.cursing;
-		}
-		if(FlxG.save.data.violence != null) {
-			violence = FlxG.save.data.violence;
-		}*/
-		if(FlxG.save.data.camZooms != null) {
+		if(FlxG.save.data.camZooms != null)
 			camZooms = FlxG.save.data.camZooms;
-		}
-		if(FlxG.save.data.hideHud != null) {
+		if(FlxG.save.data.hideHud != null)
 			hideHud = FlxG.save.data.hideHud;
-		}
-		if(FlxG.save.data.noteOffset != null) {
+		if(FlxG.save.data.noteOffset != null)
 			noteOffset = FlxG.save.data.noteOffset;
-		}
-		if(FlxG.save.data.arrowHSV != null) {
+		if(FlxG.save.data.arrowHSV != null)
 			arrowHSV = FlxG.save.data.arrowHSV;
-		}
-		if(FlxG.save.data.ghostTapping != null) {
+		if(FlxG.save.data.ghostTapping != null)
 			ghostTapping = FlxG.save.data.ghostTapping;
-		}
-		if(FlxG.save.data.timeBarType != null) {
+		if(FlxG.save.data.timeBarType != null)
 			timeBarType = FlxG.save.data.timeBarType;
-		}
-		if(FlxG.save.data.scoreZoom != null) {
+		if(FlxG.save.data.scoreZoom != null)
 			scoreZoom = FlxG.save.data.scoreZoom;
-		}
-		if(FlxG.save.data.noReset != null) {
+		if(FlxG.save.data.noReset != null)
 			noReset = FlxG.save.data.noReset;
-		}
-		if(FlxG.save.data.healthBarAlpha != null) {
+		if(FlxG.save.data.healthBarAlpha != null)
 			healthBarAlpha = FlxG.save.data.healthBarAlpha;
-		}
-		if(FlxG.save.data.comboOffset != null) {
+		if(FlxG.save.data.comboOffset != null)
 			comboOffset = FlxG.save.data.comboOffset;
-		}
-		
-		if(FlxG.save.data.ratingOffset != null) {
+		if(FlxG.save.data.ratingOffset != null)
 			ratingOffset = FlxG.save.data.ratingOffset;
-		}
-		if(FlxG.save.data.sickWindow != null) {
+		if(FlxG.save.data.sickWindow != null)
 			sickWindow = FlxG.save.data.sickWindow;
-		}
-		if(FlxG.save.data.goodWindow != null) {
+		if(FlxG.save.data.goodWindow != null)
 			goodWindow = FlxG.save.data.goodWindow;
-		}
-		if(FlxG.save.data.badWindow != null) {
+		if(FlxG.save.data.badWindow != null)
 			badWindow = FlxG.save.data.badWindow;
-		}
-		if(FlxG.save.data.safeFrames != null) {
+		if(FlxG.save.data.safeFrames != null)
 			safeFrames = FlxG.save.data.safeFrames;
-		}
-		if(FlxG.save.data.controllerMode != null) {
+		if(FlxG.save.data.controllerMode != null)
 			controllerMode = FlxG.save.data.controllerMode;
-		}
-		if(FlxG.save.data.hitsoundVolume != null) {
+		if(FlxG.save.data.hitsoundVolume != null)
 			hitsoundVolume = FlxG.save.data.hitsoundVolume;
-		}
-		if(FlxG.save.data.pauseMusic != null) {
+		if(FlxG.save.data.pauseMusic != null)
 			pauseMusic = FlxG.save.data.pauseMusic;
-		}
 		if(FlxG.save.data.gameplaySettings != null)
 		{
 			var savedMap:Map<String, Dynamic> = FlxG.save.data.gameplaySettings;
 			for (name => value in savedMap)
-			{
 				gameplaySettings.set(name, value);
-			}
 		}
 		
 		// flixel automatically saves your volume!
 		if(FlxG.save.data.volume != null)
-		{
 			FlxG.sound.volume = FlxG.save.data.volume;
-		}
 		if (FlxG.save.data.mute != null)
-		{
 			FlxG.sound.muted = FlxG.save.data.mute;
-		}
 		if (FlxG.save.data.checkForUpdates != null)
-		{
 			checkForUpdates = FlxG.save.data.checkForUpdates;
-		}
 
 		var save:FlxSave = new FlxSave();
 		save.bind('controls_v2', 'ninjamuffin99');
 		if(save != null && save.data.customControls != null) {
 			var loadedControls:Map<String, Array<FlxKey>> = save.data.customControls;
-			for (control => keys in loadedControls) {
+			for (control => keys in loadedControls)
 				keyBinds.set(control, keys);
-			}
 			reloadControls();
 		}
 	}
