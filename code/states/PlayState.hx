@@ -1216,15 +1216,15 @@ class PlayState extends MusicBeatState
 		// SONG SPECIFIC SCRIPTS
 		#if LUA_ALLOWED
 		var filesPushed:Array<String> = [];
-		var foldersToCheck:Array<String> = [Paths.getPreloadPath('data/charts/' + Paths.formatToSongPath(SONG.song) + '/')];
+		var foldersToCheck:Array<String> = [Paths.getPreloadPath('data/chart/' + Paths.formatToSongPath(SONG.song) + '/')];
 
 		#if MODS_ALLOWED
-		foldersToCheck.insert(0, Paths.mods('data/charts/' + Paths.formatToSongPath(SONG.song) + '/'));
+		foldersToCheck.insert(0, Paths.mods('data/chart/' + Paths.formatToSongPath(SONG.song) + '/'));
 		if(Paths.currentModDirectory != null && Paths.currentModDirectory.length > 0)
-			foldersToCheck.insert(0, Paths.mods(Paths.currentModDirectory + '/data/charts/' + Paths.formatToSongPath(SONG.song) + '/'));
+			foldersToCheck.insert(0, Paths.mods(Paths.currentModDirectory + '/data/chart/' + Paths.formatToSongPath(SONG.song) + '/'));
 
 		for(mod in Paths.getGlobalMods())
-			foldersToCheck.insert(0, Paths.mods(mod + '/data/charts/' + Paths.formatToSongPath(SONG.song) + '/' ));// using push instead of insert because these should run after everything else
+			foldersToCheck.insert(0, Paths.mods(mod + '/data/chart/' + Paths.formatToSongPath(SONG.song) + '/' ));// using push instead of insert because these should run after everything else
 		#end
 
 		for (folder in foldersToCheck)
@@ -3054,7 +3054,7 @@ class PlayState extends MusicBeatState
 				iconP2.animation.curAnim.curFrame = 0;
 		}
 
-		if(ClientPrefs.camMove && !isCameraOnForcedPos){ //could be better but eh
+		if(ClientPrefs.camMove && !isCameraOnForcedPos && !endingSong){ //could be better but eh
 			if(!SONG.notes[curSection].mustHitSection){
 				switch(dad.animation.curAnim.name){ //SUPPORT FOR ALT ANIMATIONS WAJSKFHSDJKLFHASJKLDFHASJKLDFHASJKLDFHL
 					case "singLEFT" | "singLEFT-loop" | "singLEFT-alt":
@@ -3065,7 +3065,7 @@ class PlayState extends MusicBeatState
 						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 + dad.camMove);
 					case "singUP" | "singUP-loop" | "singUP-alt":
 						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100 - dad.camMove);
-					case "idle" | "idle-alt" | "idle-loop" | "singLEFTmiss" | "singDOWNmiss" | "singUPmiss" | "singRIGHTmiss":
+					case "idle" | "idle-alt" | "idle-loop" | "singLEFTmiss" | "singDOWNmiss" | "singUPmiss" | "singRIGHTmiss" | "danceLeft"| "danceRight":
 						camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
 				}
 				camFollow.x += dad.cameraPosition[0] + opponentCameraOffset[0];

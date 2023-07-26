@@ -2254,7 +2254,7 @@ class FunkinLua {
 				obj.fieldWidth = width;
 			}
 		});
-		Lua_helper.add_callback(lua, "setTextBorder", function(tag:String, size:Int, color:String) {
+		Lua_helper.add_callback(lua, "setTextBorder", function(tag:String, size:Int, quality:Int, color:String, borderStyle:String = "outline") {
 			var obj:FlxText = getTextObject(tag);
 			if(obj != null)
 			{
@@ -2262,7 +2262,20 @@ class FunkinLua {
 				if(!color.startsWith('0x')) colorNum = Std.parseInt('0xff' + color);
 
 				obj.borderSize = size;
+				obj.borderQuality = quality;
 				obj.borderColor = colorNum;
+				obj.borderStyle = NONE;
+				switch(borderStyle.trim().toLowerCase())
+				{
+					case 'none':
+						obj.borderStyle = NONE;
+					case 'shadow':
+						obj.borderStyle = SHADOW;
+					case 'outline':
+						obj.borderStyle = OUTLINE;
+					case 'outline_fast':
+						obj.borderStyle = OUTLINE_FAST;
+				}
 			}
 		});
 		Lua_helper.add_callback(lua, "setTextColor", function(tag:String, color:String) {
