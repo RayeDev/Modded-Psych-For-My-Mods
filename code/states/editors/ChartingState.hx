@@ -163,6 +163,7 @@ class ChartingState extends MusicBeatState
 		16,
 		24
 	];
+	var curTime:String;
 	var curZoom:Int = 2;
 
 	private var blockPressWhileTypingOn:Array<FlxUIInputText> = [];
@@ -1490,6 +1491,7 @@ class ChartingState extends MusicBeatState
 	var colorSine:Float = 0;
 	override function update(elapsed:Float)
 	{
+		curTime = calculateTime(FlxG.sound.music.time);
 		curStep = recalculateSteps();
 
 		if(FlxG.sound.music.time < 0) {
@@ -1938,7 +1940,8 @@ class ChartingState extends MusicBeatState
 		"\nSection: " + curSec +
 		"\n\nBeat: " + Std.string(curDecBeat).substring(0,4) +
 		"\n\nStep: " + curStep +
-		"\n\nBeat Snap: " + quantization + "th";
+		"\n\nBeat Snap: " + quantization + "th" +
+		"\n\nTime: 0:00 - " + curTime;
 
 		var playedSound:Array<Bool> = [false, false, false, false]; //Prevents ouchy GF sex sounds
 		curRenderedNotes.forEachAlive(function(note:Note) {
@@ -2327,6 +2330,14 @@ class ChartingState extends MusicBeatState
 
 		updateNoteUI();
 		updateGrid();
+	}
+
+	function calculateTime(miliseconds:Float = 0):String
+	{
+		var seconds = Std.int(miliseconds / 1000);
+    	var minutes = Std.int(seconds / 60);
+    	seconds = seconds % 60;
+    	return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 	}
 
 	function recalculateSteps(add:Float = 0):Int

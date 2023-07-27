@@ -44,6 +44,18 @@ class VisualsUISubState extends BaseOptionsMenu
 			true);
 		addOption(option);
 
+		var option:Option = new Option('Note Size',
+			'How big should the notes be.',
+			'noteSize',
+			'percent',
+			0.7);
+		option.scrollSpeed = 1.6;
+		option.minValue = 0.3;
+		option.maxValue = 2;
+		option.changeValue = 0.1;
+		option.decimals = 1;
+		addOption(option);
+
 		var option:Option = new Option('Hide HUD',
 			'If checked, hides most HUD elements.',
 			'hideHud',

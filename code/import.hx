@@ -16,6 +16,8 @@ import backend.Conductor.Rating;
 import backend.Song;
 import backend.ClientPrefs;
 import backend.WeekData;
+import backend.FunkinLua;
+import backend.PlayerSettings;
 
 import cutscenes.CutsceneHandler;
 import cutscenes.DialogueBox;
@@ -35,17 +37,14 @@ import shaders.WiggleEffect.WiggleEffectType;
 
 import states.*;
 import states.editors.*;
+import states.substates.*;
 import states.TitleState;
 import states.PlayState;
 import states.editors.ChartingState;
 import states.editors.MasterEditorMenu;
 import states.editors.CharacterEditorState;
 
-import substates.*;
-import substates.GameOverSubstate;
-import substates.PauseSubState;
-import substates.GameplayChangersSubstate;
-import substates.ResetScoreSubState;
-
-import misc.FunkinLua;
-import misc.PlayerSettings;
+import states.substates.GameOverSubstate;
+import states.substates.PauseSubState;
+import states.substates.GameplayChangersSubstate;
+import states.substates.ResetScoreSubState;

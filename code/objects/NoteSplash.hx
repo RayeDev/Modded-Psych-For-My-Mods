@@ -70,8 +70,8 @@ class NoteSplash extends FlxSprite
 		colorSwap.hue = hueColor;
 		colorSwap.saturation = satColor;
 		colorSwap.brightness = brtColor;
-		offset.set(splashJSON.xOffset, splashJSON.yOffset);
-		scale.set(splashJSON.xScale, splashJSON.yScale);
+		offset.set(splashJSON.xOffset*ClientPrefs.noteSize, splashJSON.yOffset*ClientPrefs.noteSize);
+		scale.set(splashJSON.xScale*ClientPrefs.noteSize, splashJSON.yScale*ClientPrefs.noteSize);
 
 		animation.play('note' + note + '-' + 2, true);
 		if(animation.curAnim != null && splashJSON.fps == 24)

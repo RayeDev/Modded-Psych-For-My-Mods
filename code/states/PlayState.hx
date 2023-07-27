@@ -2829,8 +2829,6 @@ class PlayState extends MusicBeatState
 			case 'tank':
 				moveTank(elapsed);
 			case 'schoolEvil':
-				dad.x += Math.sin(elapsed * 0.8) * 3;
-				dad.y += Math.sin(2 * elapsed * 0.8) * 3 / 3;
 				if(!ClientPrefs.lowQuality && bgGhouls.animation.curAnim.finished) {
 					bgGhouls.visible = false;
 				}
@@ -2863,10 +2861,6 @@ class PlayState extends MusicBeatState
 					}
 				}
 			case 'limo':
-				limo.x -= Math.sin(elapsed * 1.2) * 5;
-				dad.x -= Math.sin(elapsed * 1.2) * 5.5;
-				boyfriend.x -= Math.sin(elapsed * 1.2) * 5.5;
-				gf.x -= Math.sin(elapsed * 1.2) * 3;
 				if(!ClientPrefs.lowQuality) {
 					grpLimoParticles.forEach(function(spr:BGSprite) {
 						if(spr.animation.curAnim.finished) {
@@ -2875,7 +2869,6 @@ class PlayState extends MusicBeatState
 							spr.destroy();
 						}
 					});
-					bgLimo.x += Math.sin(elapsed * 1.2) * 3;
 
 					switch(limoKillingState) {
 						case 1:

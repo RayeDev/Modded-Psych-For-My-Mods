@@ -6,6 +6,7 @@ import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
 
 class ClientPrefs {
+	public static var noteSize:Float = 0.7;
 	public static var shaders:Bool = true;
 	public static var camMove:Bool = true;
 	public static var downScroll:Bool = false;
@@ -94,6 +95,7 @@ class ClientPrefs {
 	}
 
 	public static function saveSettings() {
+		FlxG.save.data.noteSize = noteSize;
 		FlxG.save.data.shaders = shaders;
 		FlxG.save.data.camMove = camMove;
 		FlxG.save.data.downScroll = downScroll;
@@ -142,6 +144,8 @@ class ClientPrefs {
 	}
 
 	public static function loadPrefs() {
+		if(FlxG.save.data.noteSize != null)
+			noteSize = FlxG.save.data.noteSize;
 		if(FlxG.save.data.shaders != null)
 			shaders = FlxG.save.data.shaders;
 		if(FlxG.save.data.camMove != null)
