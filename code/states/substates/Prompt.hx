@@ -1,4 +1,4 @@
-package substates;
+package states.substates;
 import flixel.*;
 import flixel.FlxSubState;
 import flixel.addons.ui.FlxUIButton;

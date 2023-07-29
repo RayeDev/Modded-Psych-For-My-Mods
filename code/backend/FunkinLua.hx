@@ -1,4 +1,4 @@
-package misc;
+package backend;
 
 #if LUA_ALLOWED
 import llua.Lua;
@@ -112,6 +112,7 @@ class FunkinLua {
 		set('songLength', FlxG.sound.music.length);
 		set('songName', PlayState.SONG.song);
 		set('startedCountdown', false);
+		set('curStage', PlayState.SONG.stage);
 
 		set('isStoryMode', PlayState.isStoryMode);
 		set('difficulty', PlayState.storyDifficulty);
@@ -149,6 +150,7 @@ class FunkinLua {
 		set('gfSection', false);
 
 		// Gameplay settings
+		set('playbackRate', PlayState.instance.playbackRate);
 		set('healthGainMult', PlayState.instance.healthGain);
 		set('healthLossMult', PlayState.instance.healthLoss);
 		set('instakillOnMiss', PlayState.instance.instakillOnMiss);

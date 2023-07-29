@@ -31,7 +31,7 @@ class Cache extends MusicBeatState
 	public static var bitmapData2:Map<String,FlxGraphic>;
 
 	var images = [];
-	var all = [];
+	var music = [];
 
 	var shitz:FlxText;
 
@@ -58,16 +58,6 @@ class Cache extends MusicBeatState
 			shitz.text = "Loading " + i + "...";
 		}
 		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/data/songs")))
-		{
-			music.push(i);
-			shitz.text = "Loading " + i + "...";
-		}
-		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/sounds")))
-		{
-			music.push(i);
-			shitz.text = "Loading " + i + "...";
-		}
-		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/music")))
 		{
 			music.push(i);
 			shitz.text = "Loading " + i + "...";

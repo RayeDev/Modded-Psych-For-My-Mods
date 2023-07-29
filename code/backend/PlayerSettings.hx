@@ -1,4 +1,4 @@
-package misc;
+package backend;
 
 import flixel.FlxCamera;
 import flixel.FlxG;
