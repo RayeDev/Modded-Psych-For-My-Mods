@@ -6,6 +6,7 @@ import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
 
 class ClientPrefs {
+	public static var comboStacking = true;
 	public static var noteSize:Float = 0.7;
 	public static var shaders:Bool = true;
 	public static var camMove:Bool = true;
@@ -95,6 +96,7 @@ class ClientPrefs {
 	}
 
 	public static function saveSettings() {
+		FlxG.save.data.comboStacking = comboStacking;
 		FlxG.save.data.noteSize = noteSize;
 		FlxG.save.data.shaders = shaders;
 		FlxG.save.data.camMove = camMove;
@@ -144,6 +146,8 @@ class ClientPrefs {
 	}
 
 	public static function loadPrefs() {
+		if(FlxG.save.data.comboStacking != null)
+			comboStacking = FlxG.save.data.comboStacking;
 		if(FlxG.save.data.noteSize != null)
 			noteSize = FlxG.save.data.noteSize;
 		if(FlxG.save.data.shaders != null)

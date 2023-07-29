@@ -23,14 +23,15 @@ import cutscenes.CutsceneHandler;
 import cutscenes.DialogueBox;
 import cutscenes.DialogueBoxPsych;
 
-import objects.*;
-import objects.Alphabet;
-import objects.Character;
-import objects.Character.Boyfriend;
-import objects.NoteSplash;
-import objects.Note.EventNote;
-import objects.MenuCharacter;
-import objects.MenuItem;
+import objects.ui.*;
+import objects.game.*;
+import objects.ui.Alphabet;
+import objects.game.Character;
+import objects.game.Character.Boyfriend;
+import objects.ui.NoteSplash;
+import objects.ui.Note.EventNote;
+import objects.ui.MenuCharacter;
+import objects.ui.MenuItem;
 
 import shaders.*;
 import shaders.WiggleEffect.WiggleEffectType;

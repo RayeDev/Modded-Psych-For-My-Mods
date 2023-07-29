@@ -1,4 +1,0 @@
-Due to new source placement, things are changed.
-for example:
-setPropertyFromClass("ClientPrefs", "var", value) -> setPropertyFromClass("backend.ClientPrefs", "var", value)
-A wiki will come out soon explaining everything about this forked/modded engine.
