@@ -63,7 +63,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			'If unchecked, The camera will not move within a note hit.', //Description
 			'downScroll', //Save data variable name
 			'bool', //Variable type
-			false); //Default value
+			true); //Default value
 		addOption(option);
 
 		var option:Option = new Option('Ghost Tapping',
