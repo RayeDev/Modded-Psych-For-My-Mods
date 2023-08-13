@@ -36,7 +36,7 @@ class NoteSplash extends FlxSprite
 	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0) {
 		super(x, y);
 
-		var path:String = FileSystem.exists(Paths.modsJson('chart/${Paths.formatToSongPath(PlayState.SONG.song)}/${Paths.formatToSongPath(PlayState.SONG.song)}-splash'));
+		var path:String = Paths.json('chart/${Paths.formatToSongPath(PlayState.SONG.song)}/${PlayState.SONG.song}-splash');
 		#if MODS_ALLOWED
 		if (FileSystem.exists(Paths.modsJson('chart/${Paths.formatToSongPath(PlayState.SONG.song)}/${Paths.formatToSongPath(PlayState.SONG.song)}-splash')) || FileSystem.exists(path)) {
 		#else
