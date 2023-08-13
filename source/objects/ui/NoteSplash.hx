@@ -4,10 +4,8 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import haxe.Json;
-#if MODS_ALLOWED
 import sys.FileSystem;
 import sys.io.File;
-#end
 
 typedef SplashData =
 {
@@ -38,7 +36,16 @@ class NoteSplash extends FlxSprite
 	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0) {
 		super(x, y);
 
-		splashJSON = Json.parse(Paths.getTextFromFile('data/JSON/splash.json'));
+		var path:String = FileSystem.exists(Paths.modsJson('chart/${Paths.formatToSongPath(PlayState.SONG.song)}/${Paths.formatToSongPath(PlayState.SONG.song)}-splash'));
+		#if MODS_ALLOWED
+		if (FileSystem.exists(Paths.modsJson('chart/${Paths.formatToSongPath(PlayState.SONG.song)}/${Paths.formatToSongPath(PlayState.SONG.song)}-splash')) || FileSystem.exists(path)) {
+		#else
+		if (OpenFlAssets.exists(path)) {
+		#end
+			splashJSON = Json.parse(Paths.getTextFromFile(path));
+		}else{
+			splashJSON = Json.parse(Paths.getTextFromFile('data/chart/defaultSplash.json'));
+		}
 
 		var skin:String = '';
 		if(splashJSON.splashFile == "" || splashJSON.splashFile == null)

@@ -1,9 +1,0 @@
-‼ - First
-! - Last
-
-‼ Shader Support
-! New UI
-! Porting to 0.7
-‼ Fixing Note Splash + Custom Splashes (Size, Alpha, Offset, etc.)
-! Custom Rating/Input's
-! Stage UI's -> https://github.com/ShadowMario/FNF-PsychEngine/pull/12741
