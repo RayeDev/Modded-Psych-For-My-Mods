@@ -33,20 +33,23 @@ class NoteSplash extends FlxSprite
 	private var idleAnim:String;
 	private var textureLoaded:String = null;
 	public static var splashJSON:SplashData;
+	var isCustom:Bool = false;
 
 	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0) {
 		super(x, y);
 
-		var path:String = Paths.json('chart/${Paths.formatToSongPath(PlayState.SONG.song)}/${PlayState.SONG.song.toLowerCase()}-splash.json');
 		#if MODS_ALLOWED
-		if (FileSystem.exists(Paths.modsJson('chart/${Paths.formatToSongPath(PlayState.SONG.song)}/${PlayState.SONG.song.toLowerCase()}-splash.json')) || FileSystem.exists(path)) {
+		if (FileSystem.exists(Paths.modsJson('chart/${Paths.formatToSongPath(PlayState.SONG.song)}/customSplash'))) {
 		#else
-		if (OpenFlAssets.exists(path)) {
+		if (FileSystem.exists(Paths.json('chart/${Paths.formatToSongPath(PlayState.SONG.song)}/customSplash'))) {
 		#end
-			splashJSON = Json.parse(Paths.getTextFromFile('data/$path'));
+			splashJSON = Json.parse(Paths.getTextFromFile('data/chart/${Paths.formatToSongPath(PlayState.SONG.song)}/customSplash.json'));
+			isCustom = true;
 		}else{
 			splashJSON = Json.parse(Paths.getTextFromFile('data/chart/defaultSplash.json'));
+			isCustom = false;
 		}
+		trace(isCustom);
 
 		var skin:String = '';
 		if(splashJSON.splashFile == "" || splashJSON.splashFile == null)
