@@ -1599,7 +1599,7 @@ class FunkinLua {
 			}
 		});
 
-		Lua_helper.add_callback(lua, "makeLuaSprite", function(tag:String, image:String, x:Float, y:Float) {
+		Lua_helper.add_callback(lua, "makeLuaSprite", function(tag:String, image:String, x:Float, y:Float, cam:String) {
 			tag = tag.replace('.', '');
 			resetSpriteTag(tag);
 			var leSprite:ModchartSprite = new ModchartSprite(x, y);
@@ -1609,6 +1609,10 @@ class FunkinLua {
 			}
 			leSprite.antialiasing = ClientPrefs.globalAntialiasing;
 			PlayState.instance.modchartSprites.set(tag, leSprite);
+			if(cam == null || cam == "")
+				leSprite.cameras = cameraFromString("camGame");
+			else
+				leSprite.cameras = cameraFromString(cam);
 			leSprite.active = true;
 		});
 		Lua_helper.add_callback(lua, "makeAnimatedLuaSprite", function(tag:String, image:String, x:Float, y:Float, ?spriteType:String = "sparrow") {
@@ -1924,14 +1928,7 @@ class FunkinLua {
 		});
 
 		Lua_helper.add_callback(lua, "setObjectCamera", function(obj:String, camera:String = '') {
-			/*if(PlayState.instance.modchartSprites.exists(obj)) {
-				PlayState.instance.modchartSprites.get(obj).cameras = [cameraFromString(camera)];
-				return true;
-			}
-			else if(PlayState.instance.modchartTexts.exists(obj)) {
-				PlayState.instance.modchartTexts.get(obj).cameras = [cameraFromString(camera)];
-				return true;
-			}*/
+			luaTrace("setObjectCamera is deprecated! Use makeLuaSprite/makeLuaText (Last Varible) instead", false, true);
 			var real = PlayState.instance.getLuaObject(obj);
 			if(real!=null){
 				real.cameras = [cameraFromString(camera)];
@@ -1948,7 +1945,6 @@ class FunkinLua {
 				object.cameras = [cameraFromString(camera)];
 				return true;
 			}
-			luaTrace("Object " + obj + " doesn't exist!", false, false, FlxColor.RED);
 			return false;
 		});
 		Lua_helper.add_callback(lua, "setBlendMode", function(obj:String, blend:String = '') {
@@ -2227,10 +2223,14 @@ class FunkinLua {
 
 
 		// LUA TEXTS
-		Lua_helper.add_callback(lua, "makeLuaText", function(tag:String, text:String, width:Int, x:Float, y:Float) {
+		Lua_helper.add_callback(lua, "makeLuaText", function(tag:String, text:String, width:Int, x:Float, y:Float, cam:String) {
 			tag = tag.replace('.', '');
 			resetTextTag(tag);
 			var leText:ModchartText = new ModchartText(x, y, text, width);
+			if(cam == null || cam == "")
+				leText.cameras = cameraFromString("camGame");
+			else
+				leText.cameras = cameraFromString(cam);
 			PlayState.instance.modchartTexts.set(tag, leText);
 		});
 
@@ -2553,7 +2553,7 @@ class FunkinLua {
 			}
 		});
 		Lua_helper.add_callback(lua, "setLuaSpriteCamera", function(tag:String, camera:String = '') {
-			luaTrace("setLuaSpriteCamera is deprecated! Use setObjectCamera instead", false, true);
+			luaTrace("setLuaSpriteCamera is deprecated! Use makeLuaSprite (after y value) instead", false, true);
 			if(PlayState.instance.modchartSprites.exists(tag)) {
 				PlayState.instance.modchartSprites.get(tag).cameras = [cameraFromString(camera)];
 				return true;

@@ -6,6 +6,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import haxe.Json;
 import sys.FileSystem;
 import sys.io.File;
+import openfl.utils.Assets as OpenFlAssets;
 
 typedef SplashData =
 {
@@ -36,13 +37,13 @@ class NoteSplash extends FlxSprite
 	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0) {
 		super(x, y);
 
-		var path:String = Paths.json('chart/${Paths.formatToSongPath(PlayState.SONG.song)}/${PlayState.SONG.song}-splash');
+		var path:String = Paths.json('chart/${Paths.formatToSongPath(PlayState.SONG.song)}/${PlayState.SONG.song.toLowerCase()}-splash.json');
 		#if MODS_ALLOWED
-		if (FileSystem.exists(Paths.modsJson('chart/${Paths.formatToSongPath(PlayState.SONG.song)}/${Paths.formatToSongPath(PlayState.SONG.song)}-splash')) || FileSystem.exists(path)) {
+		if (FileSystem.exists(Paths.modsJson('chart/${Paths.formatToSongPath(PlayState.SONG.song)}/${PlayState.SONG.song.toLowerCase()}-splash.json')) || FileSystem.exists(path)) {
 		#else
 		if (OpenFlAssets.exists(path)) {
 		#end
-			splashJSON = Json.parse(Paths.getTextFromFile(path));
+			splashJSON = Json.parse(Paths.getTextFromFile('data/$path'));
 		}else{
 			splashJSON = Json.parse(Paths.getTextFromFile('data/chart/defaultSplash.json'));
 		}
@@ -77,8 +78,8 @@ class NoteSplash extends FlxSprite
 		colorSwap.hue = hueColor;
 		colorSwap.saturation = satColor;
 		colorSwap.brightness = brtColor;
-		offset.set(splashJSON.xOffset*ClientPrefs.noteSize, splashJSON.yOffset*ClientPrefs.noteSize);
-		scale.set(splashJSON.xScale*ClientPrefs.noteSize, splashJSON.yScale*ClientPrefs.noteSize);
+		offset.set(splashJSON.xOffset*ClientPrefs.noteSize/.7, splashJSON.yOffset*ClientPrefs.noteSize/.7);
+		scale.set(splashJSON.xScale*ClientPrefs.noteSize/.7, splashJSON.yScale*ClientPrefs.noteSize/.7);
 
 		animation.play('note' + note + '-' + 2, true);
 		if(animation.curAnim != null && splashJSON.fps == 24)
