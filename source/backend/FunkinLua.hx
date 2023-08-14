@@ -1599,7 +1599,7 @@ class FunkinLua {
 			}
 		});
 
-		Lua_helper.add_callback(lua, "makeLuaSprite", function(tag:String, image:String, x:Float, y:Float, cam:String) {
+		Lua_helper.add_callback(lua, "makeLuaSprite", function(tag:String, image:String, x:Float, y:Float, ?camera:String) {
 			tag = tag.replace('.', '');
 			resetSpriteTag(tag);
 			var leSprite:ModchartSprite = new ModchartSprite(x, y);
@@ -1609,10 +1609,7 @@ class FunkinLua {
 			}
 			leSprite.antialiasing = ClientPrefs.globalAntialiasing;
 			PlayState.instance.modchartSprites.set(tag, leSprite);
-			if(cam == null || cam == "")
-				leSprite.cameras = cameraFromString("camGame");
-			else
-				leSprite.cameras = cameraFromString(cam);
+			leSprite.cameras = [cameraFromString(camera)];
 			leSprite.active = true;
 		});
 		Lua_helper.add_callback(lua, "makeAnimatedLuaSprite", function(tag:String, image:String, x:Float, y:Float, ?spriteType:String = "sparrow") {
@@ -2223,14 +2220,11 @@ class FunkinLua {
 
 
 		// LUA TEXTS
-		Lua_helper.add_callback(lua, "makeLuaText", function(tag:String, text:String, width:Int, x:Float, y:Float, cam:String) {
+		Lua_helper.add_callback(lua, "makeLuaText", function(tag:String, text:String, width:Int, x:Float, y:Float, ?camera:String) {
 			tag = tag.replace('.', '');
 			resetTextTag(tag);
 			var leText:ModchartText = new ModchartText(x, y, text, width);
-			if(cam == null || cam == "")
-				leText.cameras = cameraFromString("camGame");
-			else
-				leText.cameras = cameraFromString(cam);
+			leText.cameras = [cameraFromString(camera)];
 			PlayState.instance.modchartTexts.set(tag, leText);
 		});
 
