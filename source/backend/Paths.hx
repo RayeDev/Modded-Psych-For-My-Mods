@@ -302,7 +302,7 @@ class Paths
 	}
 
 	inline static public function formatToSongPath(path:String) {
-		return path.toLowerCase().replace(' ', '-');
+		return path.toLowerCase();
 	}
 
 	// completely rewritten asset loading? fuck!
