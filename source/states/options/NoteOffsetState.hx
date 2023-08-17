@@ -1,4 +1,4 @@
-package options;
+package states.options;
 
 import flixel.util.FlxStringUtil;
 import flixel.tweens.FlxEase;
@@ -353,7 +353,7 @@ class NoteOffsetState extends MusicBeatState
 
 			persistentUpdate = false;
 			CustomFadeTransition.nextCamera = camOther;
-			MusicBeatState.switchState(new options.OptionsState());
+			MusicBeatState.switchState(new states.options.OptionsState());
 			FlxG.sound.playMusic(Paths.music('freakyMenu'), 1, true);
 			FlxG.mouse.visible = false;
 		}
