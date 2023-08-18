@@ -6,6 +6,25 @@ import flixel.graphics.frames.FlxAtlasFrames;
 
 using StringTools;
 
+typedef StrumData =
+{
+	static1:String,
+	pressed1:String,
+	confirm1:String,
+
+	static2:String,
+	pressed2:String,
+	confirm2:String,
+
+	static3:String,
+	pressed3:String,
+	confirm3:String,
+
+	static4:String,
+	pressed4:String,
+	confirm4:String,
+}
+
 class StrumNote extends FlxSprite
 {
 	private var colorSwap:ColorSwap;
@@ -14,6 +33,7 @@ class StrumNote extends FlxSprite
 	public var direction:Float = 90;//plan on doing scroll directions soon -bb
 	public var downScroll:Bool = false;//plan on doing scroll directions soon -bb
 	public var sustainReduce:Bool = true;
+	public static var strumJSON:StrumData;
 	
 	private var player:Int;
 	
