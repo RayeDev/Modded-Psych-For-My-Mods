@@ -1,0 +1,19 @@
+{
+    "strumSkin": "NOTE_assets",
+
+    "static1": "arrowLEFT",
+	"pressed1": "left press",
+	"confirm1": "left confirm",
+
+    "static2": "",
+	"pressed2": "",
+	"confirm2": "",
+
+    "static3": "",
+	"pressed3": "",
+	"confirm3": "",
+
+    "static4": "",
+	"pressed4": "",
+	"confirm4": ""
+}

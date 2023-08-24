@@ -8,6 +8,8 @@ using StringTools;
 
 typedef StrumData =
 {
+	strumSkin:String,
+	
 	static1:String,
 	pressed1:String,
 	confirm1:String,
